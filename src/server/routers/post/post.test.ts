@@ -8,8 +8,10 @@ import { inferMutationInput } from '~/utils/trpc';
 test('add and get post', async () => {
   const ctx = await createContextInner({});
   const caller = appRouter.createCaller(ctx);
+  const userId = 'd218a370a078-fc16-47e0-bd02-5c03994c';
 
   const input: inferMutationInput<'post.add'> = {
+    userId: userId,
     text: 'hello test',
     title: 'hello test',
   };
