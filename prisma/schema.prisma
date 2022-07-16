@@ -1,0 +1,254 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+model Account {
+  id                String  @id @unique @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @unique @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionToken String   @unique
+  expires      DateTime
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id            String        @id @unique @default(cuid())
+  name          String?
+  email         String?       @unique
+  emailVerified DateTime?
+  image         String?
+  role          Role          @default(USER)
+  accounts      Account[]
+  sessions      Session[]
+  posts         Post[]
+  Portfolio     Portfolio[]
+  Transaction   Transaction[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum IncomeType {
+  INTEREST
+  DIVIDEND
+  DISTRIBUTION
+  MINING
+  STAKING
+  LENDING
+  RENT
+  OTHER
+  RENUMERATION
+}
+
+model Portfolio {
+  id                         String                   @id @unique @default(cuid())
+  userId                     String
+  user                       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  icon                       String?
+  // AUD, if null, use default currency
+  currency                   String?
+  // BTC, VDHG.AX
+  ticker                     String?
+  // Amount held, eg 1 BTC, or a credit card debt of -$1500 (both expressed as a float, 1, -1500 calculated against respective currency and ticker if provided)
+  balance                    Float?
+  price                      Float?
+  priceChange24h             Float?
+  priceChangePercentage24h   Float?
+  priceUpdated               DateTime?
+  costBasis                  Float?
+  // Calculate cost basis from transaction history? NYI
+  costBasisCalculated        Boolean                  @default(false)
+  // User inputted display name
+  displayName                String?
+  // User inputted description
+  description                String?
+  // Name sometimes used to identify an asset.
+  name                       String?
+  // Used to organize accounts
+  category                   PortfolioType?
+  // Used to further sort accounts
+  type                       PortfolioSubType?
+  // Optional insitution name, ie "American Express"
+  institutionName            String?
+  incomeType                 IncomeType?
+  // Earning 5% staking? Put 5
+  annualPercentageRate       Float?
+  // Is this account active?
+  active                     Boolean                  @default(true)
+  deleted                    Boolean                  @default(false)
+  // Whether or not to utilize API
+  connectionApiType          PortfolioConnectionType? @default(MANUAL_ENTRY)
+  // Key and secret for API
+  connectionApiKey           String?
+  connectionApiSecret        String?
+  // Supported cryptocurrency wallet address
+  connectionApiWalletAddress String?
+  createdAt                  DateTime                 @default(now())
+  updatedAt                  DateTime                 @updatedAt
+}
+
+enum PortfolioConnectionType {
+  MANUAL_ENTRY
+  SWYFTX
+  COINSPOT
+  COINEX
+  BITCOIN
+  ETHEREUM
+  ATOM
+}
+
+// Rename to category
+enum PortfolioType {
+  CASH
+  CREDIT
+  CRYPTOCURRENCY
+  SUPERANNUATION
+  INVESTMENT
+  LOAN
+  REAL_ESTATE
+  VEHICLE
+  EMPLOYEE_COMPENSATION
+  OTHER_LIABILITY
+  OTHER_ASSET
+}
+
+// labels, types, subtypes, etc
+// Can I let them save a  comma seperated array of custom labels? MUI might have a component for multiselect...
+enum PortfolioSubType {
+  EXCHANGE
+  HOT_WALLET
+  COLD_WALLET
+  ACCOUNT
+  ETF
+  STOCK
+  CREDIT_CARD
+  STUDENT_LOAN
+  RESIDENTIAL_REAL_ESTATE
+  COMMERCIAL_REAL_ESTATE
+  INDUSTRIAL_REAL_ESTATE
+}
+
+enum PortfolioCategory {
+  CRYPTOCURRENCY
+  ETF
+  STOCK
+  BANK
+  DEBT
+  CREDIT
+  OTHER_ASSET
+  OTHER_LIABILITY
+  PROPERTY
+  SUPERANNUATION
+}
+
+enum PortfolioLabel {
+  // CRYPTOCURRENCY
+  EXCHANGE
+  WALLET
+  // ETF
+  // STOCK
+  BROKERAGE
+  // BANK
+  ACCOUNT
+  // DEBT
+  BNPL // Buy now pay later
+  VEHICLE
+  MORTGAGE
+  STUDENT_LOAN
+  // CREDIT
+  CREDIT_CARD
+  // OTHER_ASSET
+  // *
+  // OTHER_LIABILITY
+  // *
+  // PROPERTY
+  COMMERCIAL
+  INDUSTRIAL
+  RESIDENTIAL
+}
+
+model Transaction {
+  id          String            @id @unique @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  timestamp   String?
+  amount      String?
+  currency    String?
+  label       TransactionLabel?
+  description String?
+  txHash      String?
+  deleted     Boolean           @default(false)
+}
+
+enum TransactionLabel {
+  SWAP
+  FORK
+  GIFT
+  LOST
+  COST
+  MINING
+  REWARD
+  INCOME
+  AIRDROP
+  DIVIDEND
+  NO_LABEL
+  MARGIN_FEE
+  LIQUIDITY_IN
+  DISTRIBUTION
+  LIQUIDITY_OUT
+  LOAN_INTEREST
+  INTEREST_PAYMENT
+  REALIZED_PROFIT_LOSS
+}
+
+model Post {
+  id     String @id @unique @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  title String
+  text  String
+
+  // To return `Date`s intact through the API we need to add data transformers
+  // https://trpc.io/docs/data-transformers
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  deleted  Boolean @default(false)
+  archived Boolean @default(false)
+}

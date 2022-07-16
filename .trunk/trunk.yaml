@@ -1,0 +1,13 @@
+version: 0.1
+cli:
+  version: 0.15.0-beta
+lint:
+  disabled:
+    - gitleaks@8.8.12
+  enabled:
+    - eslint@8.19.0
+    - git-diff-check@SYSTEM
+    - markdownlint@0.31.1
+    - prettier@2.7.1
+    - svgo@2.8.0
+    - taplo@release-taplo-cli-0.6.8
