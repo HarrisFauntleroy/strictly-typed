@@ -1,0 +1,10 @@
+{
+  "Localization.text": "Hello, world!",
+  "Localization.date": "Date: ",
+  "Localization.currency": "Currency: ",
+  "Localization.number": "Number: ",
+  "Ethereum.balanceInEther": "Ether: ",
+  "Ethereum.balanceInErc20": "Lido Staked Ether: ",
+  "Ethereum.balanceInAud": "AUD: ",
+  "sidebarTitle": "CosmicOctopus.dev"
+}

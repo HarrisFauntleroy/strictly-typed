@@ -1,0 +1,138 @@
+# Strictly Typed
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=alert_status&token=860a8756475620164e037094ae1fa07d580488b9)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=coverage&token=860a8756475620164e037094ae1fa07d580488b9)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/HarrisFauntleroy/strictly-typed&style=for-the-badge)
+
+## About
+
+Strictly Typed is a note taking application that I wrote to use as a foundation for another project.
+
+## Features
+
+- 🧙‍♂️ End to end type-safety with [tRPC](https://trpc.io)
+- ⚡ Full-stack React with Next.js
+- ⚡ Database with Prisma
+- ⚙️ VSCode extensions
+- 🎨 ESLint + Prettier
+- ⚙💖 Static Code Analysis with SonarCloud
+- 💚 CI setup using GitHub Actions:
+  - ✅ E2E testing with [Playwright](https://playwright.dev/)
+  - ✅ Linting
+- 🔐 Environment variable validation at run-time
+
+## Setup
+
+**yarn:**
+
+```sh
+# Install dependencies
+yarn
+# starts postgres db + runs migrations + seeds + starts next.js
+yarn dx
+```
+
+### Requirements
+
+- Node >= 14
+- Docker (for running Postgres, Redis, etc) 🐳
+
+### **NVM**
+
+<a href="https://github.com/nvm-sh/logos"><img alt="nvm project logo" src="https://raw.githubusercontent.com/nvm-sh/logos/HEAD/nvm-logo-color.svg" height="50" /></a>
+
+Node is managed using Node Version Manager
+
+```sh
+# Update node version
+nvm use <version>
+```
+
+## Development
+
+### Commands
+
+```sh
+# runs `prisma generate` + `prisma migrate` + `next build`
+yarn build
+
+## resets local db
+yarn db-nuke
+
+# starts next.js
+yarn dev
+
+# starts postgres db + runs migrations + seeds + starts next.js
+yarn dx
+
+# runs e2e tests on dev
+yarn test-dev
+
+# runs e2e tests on `next start` - build required before
+yarn test-start
+
+# runs normal jest unit tests
+yarn test:unit
+
+# runs e2e tests
+yarn test:e2e
+
+# Prettier
+yarn prettier
+
+# Prettier and auto fix
+yarn prettier:fix
+
+# Lint
+yarn lint
+# Lint and auto fix
+yarn lint:fix
+
+# Generate prisma schema
+npx prisma
+
+# Format schema.prisma
+npx prisma format
+
+# Launch prisma studio
+npx prisma studio
+```
+
+## Files of note
+
+<table>
+  <thead>
+    <tr>
+      <th>Path</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="./prisma/schema.prisma"><code>./prisma/schema.prisma</code></a></td>
+      <td>Prisma schema</td>
+    </tr>
+    <tr>
+      <td><a href="./src/pages/api/trpc/[trpc].ts"><code>./src/pages/api/trpc/[trpc].ts</code></a></td>
+      <td>tRPC response handler</td>
+    </tr>
+    <tr>
+      <td><a href="./src/server/routers"><code>./src/server/routers</code></a></td>
+      <td>Your app's different tRPC-routers</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+<!-- LICENSE -->
+
+## **License** ⚖️
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+<!-- DISCLAIMER -->
+
+## **Disclaimer** 🚨
+
+This software is currently a work in progress and is considered in ALPHA state. Features will appear and disappear, APIs will be changed, bugs will be introduced, your feedback is always welcome! 🚧
