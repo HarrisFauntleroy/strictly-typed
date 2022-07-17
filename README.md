@@ -39,10 +39,10 @@ Strictly Typed is a note taking application that I wrote to use as a foundation 
 # Install dependencies
 yarn
 # starts postgres db + runs migrations + seeds + starts next.js
-yarn dx
+yarn setup
 ```
 
-### Requirements
+### sRequirements
 
 - Node >= 14
 - Docker (for running Postgres, Redis, etc) 🐳
@@ -70,19 +70,19 @@ cp .env.template > .env
 yarn build
 
 ## resets local db
-yarn db-nuke
+yarn db:reset
 
 # starts next.js
 yarn dev
 
 # starts postgres db + runs migrations + seeds + starts next.js
-yarn dx
+yarn setup
 
 # runs e2e tests on dev
-yarn test-dev
+yarn test:dev
 
 # runs e2e tests on `next start` - build required before
-yarn test-start
+yarn test:start
 
 # runs normal jest unit tests
 yarn test:unit
