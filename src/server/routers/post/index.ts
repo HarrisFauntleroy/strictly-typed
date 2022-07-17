@@ -72,10 +72,30 @@ export const postRouter = createRouter()
       return post;
     },
   })
+  .query('byUser', {
+    input: z.object({
+      userId: z.string(),
+    }),
+    async resolve({ input }) {
+      const { userId } = input;
+      const post = await prisma.post.findMany({
+        where: { userId },
+        select: defaultPostSelect,
+      });
+      if (!post) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No post with userId '${userId}'`,
+        });
+      }
+      return post;
+    },
+  })
   // update
   .mutation('edit', {
     input: z.object({
-      id: z.string().uuid(),
+      id: z.string(),
+      userId: z.string(),
       data: z.object({
         title: z.string().min(1).max(32).optional(),
         text: z.string().min(1).optional(),

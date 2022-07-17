@@ -98,7 +98,3 @@ export default NextAuth({
   // 	async session(message) { /* session is active */ },
   // }
 });
-
-export interface SessionExtended extends Session {
-  userId: string;
-}

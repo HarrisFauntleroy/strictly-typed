@@ -5,10 +5,11 @@ import { createContextInner } from '../../context';
 import { appRouter } from '../_app';
 import { inferMutationInput } from '~/utils/trpc';
 
+const userId = 'd218a370a078-fc16-47e0-bd02-5c03994c';
+
 test('add and get post', async () => {
   const ctx = await createContextInner({});
   const caller = appRouter.createCaller(ctx);
-  const userId = 'd218a370a078-fc16-47e0-bd02-5c03994c';
 
   const input: inferMutationInput<'post.add'> = {
     userId: userId,
@@ -22,3 +23,5 @@ test('add and get post', async () => {
 
   expect(byId).toMatchObject(input);
 });
+
+// TODO WRITE MORE TESTS

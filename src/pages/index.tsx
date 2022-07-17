@@ -9,33 +9,22 @@ import { Role } from '@prisma/client';
 import { trpc } from '../utils/trpc';
 import { NextPageWithLayout } from './_app';
 import {
-  Avatar,
-  Box,
-  Center,
   CircularProgress,
-  Heading,
+  GridItem,
+  SimpleGrid,
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { FormattedDate } from 'react-intl';
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { PostCard, PostsForm } from '~/components/Posts';
+
+const postsByUser = 'post.byUser';
 
 const IndexPage: NextPageWithLayout = () => {
-  const utils = trpc.useContext();
-  const postsQuery = trpc.useQuery(['post.all']);
-  const addPost = trpc.useMutation('post.add', {
-    async onSuccess() {
-      // refetches posts after a post is added
-      await utils.invalidateQueries(['post.all']);
-    },
-  });
-
   const session = useSession();
-
   const userId = session?.data?.userId;
 
-  console.log(session);
+  const postsQuery = trpc.useQuery([postsByUser, { userId: userId || '' }]);
 
   // prefetch all posts for instant navigation
   // useEffect(() => {
@@ -44,140 +33,24 @@ const IndexPage: NextPageWithLayout = () => {
   //   }
   // }, [postsQuery.data, utils]);
 
+  if (postsQuery.status === 'loading') return <CircularProgress />;
+
   return (
-    <>
+    <Stack gap={2}>
       <Head>
         <title>Home</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <h2>
-        Posts
-        {postsQuery.status === 'loading' && <CircularProgress />}
-      </h2>
-      {postsQuery.data?.map((item) => (
-        <Center py={6} key={item.id}>
-          <Box
-            maxW={'445px'}
-            w={'full'}
-            boxShadow={'2xl'}
-            rounded={'md'}
-            p={6}
-            overflow={'hidden'}
-          >
-            {/* <Box
-              h={'210px'}
-              bg={'gray.100'}
-              mt={-6}
-              mx={-6}
-              mb={6}
-              pos={'relative'}
-            >
-              image
-            </Box> */}
-            <Stack>
-              <Text
-                color={'green.500'}
-                textTransform={'uppercase'}
-                fontWeight={800}
-                fontSize={'sm'}
-                letterSpacing={1.1}
-              >
-                Post
-              </Text>
-              <Heading fontSize={'2xl'} fontFamily={'body'}>
-                {item.title}
-              </Heading>
-              <Text color={'gray.500'}>{item.text}</Text>
-              <Link href={`/post/${item.id}`}>
-                <a>View more</a>
-              </Link>
-            </Stack>
-            <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
-              <Avatar src="/vercel.svg" />
-              <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-                <Text fontWeight={600}>Harris Fauntleroy</Text>
-                <Text color={'gray.500'}>
-                  <FormattedDate value={item.createdAt} />
-                </Text>
-              </Stack>
-            </Stack>
-          </Box>
-        </Center>
-
-        // <Flex
-        //   key={item.id}
-        //   borderRadius="20px"
-        //   bg={boxBg}
-        //   p="20px"
-        //   h="345px"
-        //   w={{ base: '315px', md: '345px' }}
-        //   alignItems="center"
-        //   direction="column"
-        // >
-        //   <h3>{item.title}</h3>
-        //   <h3>{item.text}</h3>
-        //   <Link href={`/post/${item.id}`}>
-        //     <a>View more</a>
-        //   </Link>
-        // </Flex>
-      ))}
-      <hr />
-      <Center>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            /**
-             * In a real app you probably don't want to use this manually
-             * Checkout React Hook Form - it works great with tRPC
-             * @link https://react-hook-form.com/
-             */
-            const $userId: HTMLInputElement = (e as any).target.elements.userId;
-            const $title: HTMLInputElement = (e as any).target.elements.title;
-            const $text: HTMLInputElement = (e as any).target.elements.text;
-
-            const input = {
-              userId: $userId.value,
-              title: $title.value,
-              text: $text.value,
-            };
-            try {
-              console.log(input);
-              await addPost.mutateAsync(input);
-              // Reset after submit
-              $userId.value = '';
-              $title.value = '';
-              $text.value = '';
-            } catch {}
-          }}
-        >
-          <label htmlFor="userId">userId: </label>
-          <input
-            id="userId"
-            name="userId"
-            type="text"
-            disabled={addPost.isLoading}
-            value={userId}
-          />
-          <br />
-          <label htmlFor="title">Title: </label>
-          <input
-            id="title"
-            name="title"
-            type="text"
-            disabled={addPost.isLoading}
-          />
-
-          <br />
-          <label htmlFor="text">Text: </label>
-          <textarea id="text" name="text" disabled={addPost.isLoading} />
-          <br />
-          <input type="submit" disabled={addPost.isLoading} />
-          {addPost.error && (
-            <p style={{ color: 'red' }}>{addPost.error.message}</p>
-          )}
-        </form>
-      </Center>
-    </>
+      <Text fontSize="4xl">Posts</Text>
+      <PostsForm mode="add" label="New Post" />
+      <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} gap={4}>
+        {postsQuery.data?.map((item) => (
+          <GridItem key={item.id}>
+            <PostCard post={item} />
+          </GridItem>
+        ))}
+      </SimpleGrid>
+    </Stack>
   );
 };
 
