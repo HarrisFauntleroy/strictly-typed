@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { randomUUID } from 'crypto';
+import { uuid } from 'uuidv4';
 
 test.setTimeout(35e3);
 
@@ -15,7 +15,7 @@ test('test 404', async ({ page }) => {
 });
 
 test('add a post', async ({ page, browser }) => {
-  const nonce = `${Math.random()}`;
+  const nonce = `${uuid()}`;
 
   await page.goto('/');
   await page.waitForNavigation();
@@ -38,7 +38,7 @@ test('add a post', async ({ page, browser }) => {
 
 test('server-side rendering test', async ({ page, browser }) => {
   // add a post
-  const nonce = `${randomUUID()}`;
+  const nonce = `${uuid()}`;
 
   await page.goto('/');
   await page.fill(`[name=title]`, nonce);
