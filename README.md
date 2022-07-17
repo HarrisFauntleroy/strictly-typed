@@ -63,6 +63,9 @@ nvm use <version>
 ### Commands
 
 ```sh
+# Copy .env file and fill in values
+cp .env.template > .env
+
 # runs `prisma generate` + `prisma migrate` + `next build`
 yarn build
 
