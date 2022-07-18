@@ -21,7 +21,7 @@ jobs:
           - 5432:5432
     steps:
       - name: Secrets to Env
-      - uses: oNaiPs/secrets-to-env-action@v1
+        uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
       - name: Checkout repo
