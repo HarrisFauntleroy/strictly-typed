@@ -2,9 +2,8 @@ name: end-to-end-testing
 on: [push]
 jobs:
   e2e:
-  - run: echo "Value of DATABASE_URL: $DATABASE_URL"
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: postgresql://user:HI4iBaLbA184N7J6@202.172.109.118:5432/postgres
       NODE_ENV: test
       NEXTAUTH_SECRET: supersecret
     runs-on: ${{ matrix.os }}
@@ -17,7 +16,7 @@ jobs:
         image: postgres:13
         env:
           POSTGRES_USER: postgres
-          POSTGRES_DB: strictly-typed-testing
+          POSTGRES_DB: postgres
         ports:
           - 5432:5432
     steps:
