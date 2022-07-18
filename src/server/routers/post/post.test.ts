@@ -5,16 +5,18 @@ import { createContextInner } from '../../context';
 import { appRouter } from '../_app';
 import { inferMutationInput } from '~/utils/trpc';
 
-const userId = 'd218a370a078-fc16-47e0-bd02-5c03994c';
+const userId = 'test-user-id';
+// Must match the actual Test User created by prisma/seed.ts
+const testUser = 'Test User';
 
 test('add and get post', async () => {
   const ctx = await createContextInner({});
   const caller = appRouter.createCaller(ctx);
 
   const input: inferMutationInput<'post.add'> = {
-    userId,
-    text: 'TEST POST',
-    title: 'TEST POST',
+    userId: userId,
+    text: testUser,
+    title: testUser,
   };
 
   const post = await caller.mutation('post.add', input);

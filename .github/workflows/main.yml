@@ -3,7 +3,7 @@ on: [push]
 jobs:
   e2e:
     env:
-      DATABASE_URL: postgresql://user:HI4iBaLbA184N7J6@202.172.109.118:5432/postgres
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NODE_ENV: test
       NEXTAUTH_SECRET: supersecret
     runs-on: ${{ matrix.os }}
