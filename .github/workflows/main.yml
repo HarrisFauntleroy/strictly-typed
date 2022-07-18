@@ -2,8 +2,9 @@ name: end-to-end-testing
 on: [push]
 jobs:
   e2e:
+  - run: echo "Value of DATABASE_URL: $DATABASE_URL"
     env:
-      # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       NODE_ENV: test
       NEXTAUTH_SECRET: supersecret
     runs-on: ${{ matrix.os }}
@@ -20,10 +21,6 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - name: Secrets to Env
-        uses: oNaiPs/secrets-to-env-action@v1
-        with:
-          secrets: ${{ toJSON(secrets) }}
       - name: Checkout repo
         uses: actions/checkout@v2
 
