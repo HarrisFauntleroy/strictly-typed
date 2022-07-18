@@ -14,7 +14,7 @@ A simple notes application.
 - ⚙️ VS Code suggested extensions
 - 🎨 ESLint + Prettier
 - 💖 CI setup using GitHub Actions:
-  - ✅ End to end testing with [Playwright](https://playwright.dev/)
+  - ✅ End-to-end testing with [Playwright](https://playwright.dev/)
   - ✅ Linting
   - ✅ Static Code Analysis with SonarCloud
 
