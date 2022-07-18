@@ -13,15 +13,13 @@ export type GenericInput =
   | Record<string, unknown>
   | { [x: string]: unknown };
 
-interface GetPostHistory {
-  userId?: string;
-}
-
 // Get all users posts from the database
-export const getPostHistory = async ({ userId }: GetPostHistory) =>
+// TODO write test for endpoint
+// Test for good input, bad input, undefined and null inputs, etc.
+export const getPostHistory = async (userId?: string) =>
   await prisma.post.findMany({
     where: {
-      userId: userId,
+      userId: userId || 'NOT_FOUND',
     },
   });
 
@@ -34,7 +32,7 @@ const handler = async (
   // eg. http://.../api/history?userId=<userId>
   const { userId } = req.query;
   //	Return post history associated with the user
-  const history = await getPostHistory({ userId: String(userId) });
+  const history = await getPostHistory(String(userId));
   // Return history as a JSON object under the key 'data'
   res.status(200).json({ data: history, userId: userId });
 };
