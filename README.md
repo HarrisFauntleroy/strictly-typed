@@ -16,21 +16,21 @@
 
 ## About
 
-Strictly Typed is a note-taking application that I wrote to use as a foundation for another project.
+A simple notes application.
 
 ## Features
 
-- 🐳 Simple script based deployment with docker compose 🪄
-- 🧙‍♂️ End to end type-safety with [tRPC](https://trpc.io)
 - ⚡ Full-stack React with Next.js
 - ⚡ Postgres Database with Prisma
+- 🐳 Simple deployment with docker compose 🪄
+- 🧙‍♂️ End to end type-safety with [tRPC](https://trpc.io)
+- 🔐 Runtime .env validation
 - ⚙️ VS Code suggested extensions
 - 🎨 ESLint + Prettier
 - 💖 CI setup using GitHub Actions:
-  - ✅ E2E testing with [Playwright](https://playwright.dev/)
+  - ✅ End to end testing with [Playwright](https://playwright.dev/)
   - ✅ Linting
   - ✅ Static Code Analysis with SonarCloud
-- 🔐 Environment variable validation at run-time
 
 ## Setup
 
