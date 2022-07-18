@@ -1,9 +1,28 @@
+/**
+ *
+ * Context provider for incoming requests
+ *
+ */
+import { PrismaClient } from '@prisma/client';
 import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
+import { NodeHTTPCreateContextFnOptions } from '@trpc/server/adapters/node-http';
+import { IncomingMessage } from 'http';
+import { getSession } from 'next-auth/react';
+import ws from 'ws';
+
+const prisma = new PrismaClient({
+  log:
+    process.env.NODE_ENV === 'development'
+      ? ['query', 'error', 'warn']
+      : ['error'],
+});
 
 interface CreateContextOptions {
   // session: Session | null;
 }
+
+export type ContextInner = trpc.inferAsyncReturnType<typeof createContextInner>;
 
 /**
  * Inner function for `createContext` where we create the context.
@@ -13,30 +32,42 @@ export async function createContextInner(_opts: CreateContextOptions) {
   return {};
 }
 
-export type Context = trpc.inferAsyncReturnType<typeof createContextInner>;
-
 /**
  * Creates context for an incoming request
  * @link https://trpc.io/docs/context
  */
-export async function createContext(
-  opts: trpcNext.CreateNextContextOptions,
-): Promise<Context> {
-  // Will be available as `ctx` in all your resolvers
+export const createContext = async ({
+  req,
+  res,
+}:
+  | trpcNext.CreateNextContextOptions
+  | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>) => {
+  const session = await getSession({ req });
+  console.log('createContext for', session?.user?.name ?? 'unknown user');
 
-  // This is just an example
-  async function getTokenFromHeader() {
-    if (opts?.req.headers.authorization) {
-      return opts.req.headers.authorization;
-    }
-    return null;
+  let useMockProvider = process.env.NODE_ENV === 'test';
+
+  const { GITHUB_CLIENT_ID, GITHUB_SECRET, NODE_ENV, APP_ENV } = process.env;
+
+  if (
+    (NODE_ENV !== 'production' || APP_ENV === 'test') &&
+    (!GITHUB_CLIENT_ID || !GITHUB_SECRET)
+  ) {
+    console.log(
+      '⚠️ Using mocked GitHub auth correct credentials were not added',
+    );
+    useMockProvider = true;
   }
 
-  const token = await getTokenFromHeader();
+  if (useMockProvider) {
+    return await createContextInner({});
+  } else
+    return {
+      req,
+      res,
+      prisma,
+      session,
+    };
+};
 
-  // Example
-  console.log(token);
-  // for API-response caching see https://trpc.io/docs/caching
-
-  return await createContextInner({});
-}
+export type Context = trpc.inferAsyncReturnType<typeof createContext>;

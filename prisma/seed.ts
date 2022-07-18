@@ -9,12 +9,13 @@ const prisma = new PrismaClient();
 
 async function main() {
   const firstPostId = '5c03994c-fc16-47e0-bd02-d218a370a078';
-  const userId = 'd218a370a078-fc16-47e0-bd02-5c03994c';
+  const userId = 'test-user-id';
+  const testUser = 'Test User';
   await prisma.user.create({
     data: {
       id: userId,
-      name: 'Test User',
-      email: 'test@example.com',
+      name: testUser,
+      email: testUser,
     },
   });
 

@@ -1,8 +1,7 @@
 import { SettingsIcon } from '@chakra-ui/icons';
 import { Box, Flex, Icon, useDisclosure } from '@chakra-ui/react';
 import { Role } from '@prisma/client';
-import { NextPageContext } from 'next';
-import { getSession, signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import React, { ReactNode, useMemo } from 'react';
 import { MdAdminPanelSettings, MdLogin, MdLogout } from 'react-icons/md';
@@ -10,14 +9,6 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import Footer from '~/components/Footer';
 import Header from '~/components/Header';
 import Sidebar, { ISidebarContent } from '~/components/Sidebar';
-
-export const getServerSideProps = async (context: NextPageContext) => {
-  const session = await getSession(context);
-  const user = session?.user;
-  return {
-    props: { session, user },
-  };
-};
 
 type DefaultLayoutProps = { children: ReactNode };
 

@@ -29,7 +29,7 @@ const Index: NextPageWithLayout = () => {
 };
 
 Index.auth = true;
-Index.roles = [Role.USER, Role.ADMIN];
+Index.roles = [Role.USER];
 export default Index;
 
 /**

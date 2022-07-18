@@ -20,8 +20,8 @@ import { AppContext } from '~/providers';
 import { AppRouter } from '~/server/routers/_app';
 import { SSRContext } from '~/utils/trpc';
 
-export const getServerSideProps = async (ctx: NextPageContext) => {
-  const session = await getSession(ctx);
+export const getServerSideProps = async (context: NextPageContext) => {
+  const session = await getSession(context);
   return {
     props: { session },
   };
