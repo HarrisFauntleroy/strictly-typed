@@ -33,8 +33,8 @@ interface SidebarProps {
     onClose: () => void;
     onToggle: () => void;
     isControlled: boolean;
-    getButtonProps: (props?: unknown) => unknown;
-    getDisclosureProps: (props?: unknown) => unknown;
+    getButtonProps: () => unknown;
+    getDisclosureProps: () => unknown;
   };
   headerContent: ISidebarContent[];
   bodyContent: ISidebarContent[];

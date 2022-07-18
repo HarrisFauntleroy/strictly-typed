@@ -9,6 +9,7 @@ import { CircularProgress, SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Role } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
+import React from 'react';
 import { PostCard, PostsForm } from '~/components/Posts';
 
 const postsByUser = 'post.byUser';

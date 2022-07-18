@@ -13,8 +13,8 @@ test('add and get post', async () => {
 
   const input: inferMutationInput<'post.add'> = {
     userId: userId,
-    text: 'hello test',
-    title: 'hello test',
+    text: 'NewPost',
+    title: 'NewPost',
   };
   const post = await caller.mutation('post.add', input);
   const byId = await caller.query('post.byId', {
@@ -22,6 +22,27 @@ test('add and get post', async () => {
   });
 
   expect(byId).toMatchObject(input);
+
+  const editedInput: inferMutationInput<'post.edit'> = {
+    id: post.id,
+    userId: userId,
+    data: { text: 'Edited Post', title: 'Edited Post' },
+  };
+
+  const editedPost = await caller.mutation('post.edit', editedInput);
+  const editedPostById = await caller.query('post.byId', {
+    id: editedPost.id,
+  });
+
+  const editedPostInput = editedInput.data;
+
+  expect(editedPostById).toMatchObject(editedPostInput);
 });
 
-// TODO WRITE MORE TESTS
+test.todo('Add Update Post test');
+
+test.todo('Add Delete Post test');
+
+test.todo('Add Archive Post test');
+
+test.todo('Add Publish Post test');

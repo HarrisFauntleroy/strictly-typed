@@ -13,7 +13,7 @@ import { Session } from 'next-auth';
 import { SessionProvider, getSession } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import { AppType, NextPageContext } from 'next/dist/shared/lib/utils';
-import { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import superjson from 'superjson';
 import { DefaultLayout } from '~/components/DefaultLayout';
 import { AppContext } from '~/providers';
@@ -72,7 +72,6 @@ function getBaseUrl() {
 }
 
 export default withTRPC<AppRouter>({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   config() {
     /**
      * If you want to use SSR, you need to use the server's full URL

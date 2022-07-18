@@ -16,7 +16,7 @@
 
 ## About
 
-Strictly Typed is a note taking application that I wrote to use as a foundation for another project.
+Strictly Typed is a note-taking application that I wrote to use as a foundation for another project.
 
 ## Features
 
@@ -42,10 +42,10 @@ yarn
 yarn setup
 ```
 
-### sRequirements
+### Requirements
 
 - Node >= 14
-- Docker (for running Postgres, Redis, etc) 🐳
+- Docker (for running Postgres, Redis, etc.) 🐳
 
 ### **NVM**
 
