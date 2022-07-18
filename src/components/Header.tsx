@@ -27,20 +27,15 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import {
-  MdAccountBalanceWallet,
-  MdBarChart,
   MdChevronRight,
   MdLightMode,
-  MdList,
   MdLogin,
   MdLogout,
   MdMenu,
   MdMenuOpen,
   MdNightsStay,
-  MdSavings,
   MdSettings,
 } from 'react-icons/md';
-import { StatusIndicator } from '~/components/Status';
 
 interface Props {
   sidebarControls: {
@@ -142,26 +137,17 @@ const Header = ({ sidebarControls }: Props) => {
                   <br />
                   <MenuDivider />
                   <Stack padding="8px">
-                    <Button leftIcon={<MdBarChart />}>
-                      <Link href="/overview">Overview</Link>
-                    </Button>
-                    <Button leftIcon={<MdAccountBalanceWallet />}>
-                      <Link href="/accounts">Accounts</Link>
-                    </Button>
-                    <Button leftIcon={<MdSavings />}>
-                      <Link href="/budget">Budgets</Link>
+                    <Button>
+                      <Link href="/posts">Posts</Link>
                     </Button>
                   </Stack>
                   <MenuDivider />
-                  <Link href="/status">
-                    <MenuItem icon={<StatusIndicator active />}>
-                      API Status Page
-                    </MenuItem>
-                  </Link>
-                  <Link href="/changelog">
+                  {/* <Link href="/changelog">
                     <MenuItem icon={<MdList />}>Changelog</MenuItem>
+                  </Link> */}
+                  <Link href="/settings">
+                    <MenuItem icon={<MdSettings />}>Settings</MenuItem>
                   </Link>
-                  <MenuItem icon={<MdSettings />}>Preferences</MenuItem>
                   <MenuItem
                     icon={session ? <MdLogout /> : <MdLogin />}
                     onClick={

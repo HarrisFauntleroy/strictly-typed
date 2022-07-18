@@ -10,7 +10,7 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import React from 'react';
 
-const IndexPage: NextPageWithLayout = () => {
+const Index: NextPageWithLayout = () => {
   return (
     <Stack gap={2}>
       <Head>
@@ -28,9 +28,9 @@ const IndexPage: NextPageWithLayout = () => {
   );
 };
 
-IndexPage.auth = true;
-IndexPage.roles = [Role.USER, Role.ADMIN];
-export default IndexPage;
+Index.auth = true;
+Index.roles = [Role.USER, Role.ADMIN];
+export default Index;
 
 /**
  * If you want to statically render this page

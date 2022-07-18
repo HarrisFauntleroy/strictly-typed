@@ -4,13 +4,7 @@
  *	Checks if user is logged in before allowing access to page
  *
  */
-import {
-  Center,
-  CircularProgress,
-  Stack,
-  StackDivider,
-  Text,
-} from '@chakra-ui/react';
+import { Center, CircularProgress } from '@chakra-ui/react';
 import { Role } from '@prisma/client';
 import { NextPageContext } from 'next';
 import { getSession, useSession } from 'next-auth/react';
@@ -46,6 +40,7 @@ const Auth = ({ children, roles }: AuthProps) => {
   const role = session?.user.role || Role.USER;
 
   React.useEffect(() => {
+    // No session found and no longer loading
     if (!loading && !session) {
       logger.debug('!loading && !session');
       logger.debug('This triggers a redirect to sign in');
@@ -53,27 +48,32 @@ const Auth = ({ children, roles }: AuthProps) => {
     }
   }, [loading, router, session]);
 
-  if (loading || !session) {
+  const isRoleAllowed = () => roles && !roles?.includes(role);
+  const isWaitingForSession = () => loading || !session;
+
+  if (isWaitingForSession()) {
     logger.debug('loading || !session');
     logger.debug('This displays a loading indicator');
     return (
-      <Center minWidth="100vw" minHeight="100vh">
-        <Stack>
-          <Text textAlign="center">Authenticating</Text>
-          <StackDivider />
-          <CircularProgress />
-        </Stack>
+      <Center
+        position="fixed"
+        minWidth="100vw"
+        minHeight="100vh"
+        background="transparent"
+        top={0}
+        left={0}
+      >
+        <CircularProgress isIndeterminate size="64px" thickness="8px" />
       </Center>
     );
   }
-  logger.debug(roles);
-
-  if (roles && !roles?.includes(role)) {
+  if (isRoleAllowed()) {
     logger.debug('roles && !roles?.includes(role)');
     logger.debug('This triggers a redirect to sign in');
     logger.debug(roles);
     router.push('/api/auth/signin');
   }
+  // Continue
   return children;
 };
 

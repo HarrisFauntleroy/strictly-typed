@@ -5,7 +5,13 @@
  */
 import { trpc } from '../utils/trpc';
 import { NextPageWithLayout } from './_app';
-import { CircularProgress, SimpleGrid, Stack, Text } from '@chakra-ui/react';
+import {
+  Center,
+  CircularProgress,
+  SimpleGrid,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { Role } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -27,12 +33,24 @@ const Posts: NextPageWithLayout = () => {
   //   }
   // }, [postsQuery.data, utils]);
 
-  if (postsQuery.status === 'loading') return <CircularProgress />;
+  if (postsQuery.status === 'loading')
+    return (
+      <Center
+        position="fixed"
+        minWidth="100vw"
+        minHeight="100vh"
+        background="transparent"
+        top={0}
+        left={0}
+      >
+        <CircularProgress isIndeterminate size="64px" thickness="8px" />
+      </Center>
+    );
 
   return (
     <Stack gap={2}>
       <Head>
-        <title>Home</title>
+        <title>Posts</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Text fontSize="4xl">Posts</Text>
