@@ -3,8 +3,8 @@
  * Index
  *
  */
-import { trpc } from '../utils/trpc';
 import { NextPageWithLayout } from './_app';
+import { getPostHistory } from './api/history';
 import {
   Center,
   CircularProgress,
@@ -12,15 +12,28 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import { Role } from '@prisma/client';
-import { useSession } from 'next-auth/react';
+import { Post, Role } from '@prisma/client';
+import { NextPageContext } from 'next';
+import { getSession, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import React from 'react';
 import { PostCard, PostsForm } from '~/components/Posts';
+import { trpc } from '~/utils/trpc';
 
 const postsByUser = 'post.byUser';
 
-const Posts: NextPageWithLayout = () => {
+export const getServerSideProps = async (context: NextPageContext) => {
+  const session = await getSession(context);
+  const userId = session?.userId;
+  const history = await getPostHistory(userId);
+
+  return {
+    props: { history },
+  };
+};
+
+const Posts: NextPageWithLayout = ({ history }: { history?: Post[] }) => {
+  console.log(history);
   const session = useSession();
   const userId = session?.data?.userId;
 
