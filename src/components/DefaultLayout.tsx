@@ -1,20 +1,11 @@
-import { Avatar, Box, Flex, Icon, useDisclosure } from '@chakra-ui/react';
+import { SettingsIcon } from '@chakra-ui/icons';
+import { Box, Flex, Icon, useDisclosure } from '@chakra-ui/react';
 import { Role } from '@prisma/client';
 import { NextPageContext } from 'next';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import Head from 'next/head';
 import React, { ReactNode, useMemo } from 'react';
-import {
-  MdAccountBalance,
-  MdAdminPanelSettings,
-  MdBarChart,
-  MdHome,
-  MdLogin,
-  MdLogout,
-  MdNote,
-  MdQuestionAnswer,
-  MdSavings,
-} from 'react-icons/md';
+import { MdAdminPanelSettings, MdLogin, MdLogout } from 'react-icons/md';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import Footer from '~/components/Footer';
 import Header from '~/components/Header';
@@ -35,57 +26,9 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
 
   const { data: session } = useSession();
 
-  const displayName = session?.user.name;
+  const SidebarHeader: ISidebarContent[] = useMemo(() => [], []);
 
-  const SidebarHeader: ISidebarContent[] = useMemo(
-    () => [
-      {
-        icon: (
-          <Avatar src={session?.user.image ?? '/images/user-not-found.jpg'} />
-        ),
-        href: '/profile',
-        title: displayName ?? '',
-        disabled: !session,
-      },
-    ],
-    [displayName, session],
-  );
-
-  const SidebarContent: ISidebarContent[] = useMemo(
-    () => [
-      {
-        icon: <Icon as={MdHome} />,
-        title: 'Home',
-        href: '/',
-        disabled: !session,
-      },
-      {
-        icon: <Icon as={MdBarChart} />,
-        title: 'Overview',
-        href: '/overview',
-        disabled: !session,
-      },
-      {
-        icon: <Icon as={MdAccountBalance} />,
-        title: 'Accounts',
-        href: '/accounts',
-        disabled: !session,
-      },
-      {
-        icon: <Icon as={MdSavings} />,
-        title: 'Budget',
-        href: '/budget',
-        disabled: !session,
-      },
-      {
-        icon: <Icon as={MdNote} />,
-        title: 'notes',
-        href: '/notes',
-        disabled: !session,
-      },
-    ],
-    [session],
-  );
+  const SidebarContent: ISidebarContent[] = useMemo(() => [], []);
 
   const SidebarFooter: ISidebarContent[] = useMemo(
     () => [
@@ -96,9 +39,9 @@ export const DefaultLayout = ({ children }: DefaultLayoutProps) => {
         hidden: !session || session?.user?.role !== Role.ADMIN,
       },
       {
-        icon: <Icon as={MdQuestionAnswer} />,
-        title: 'help',
-        href: '/help',
+        icon: <Icon as={SettingsIcon} />,
+        title: 'settings',
+        href: '/settings',
         disabled: !session,
       },
       {
