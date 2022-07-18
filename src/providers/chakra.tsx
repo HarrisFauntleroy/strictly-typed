@@ -1,6 +1,8 @@
-import { ChakraProvider as Provider, GlobalStyle } from '@chakra-ui/react';
-// 1. Import the extendTheme function
-import { extendTheme } from '@chakra-ui/react';
+import {
+  ChakraProvider as Provider,
+  GlobalStyle,
+  extendTheme,
+} from '@chakra-ui/react';
 import { mode } from '@chakra-ui/theme-tools';
 import React, { PropsWithChildren } from 'react';
 

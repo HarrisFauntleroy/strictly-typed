@@ -14,7 +14,7 @@ import { PostCard, PostsForm } from '~/components/Posts';
 
 const postsByUser = 'post.byUser';
 
-const IndexPage: NextPageWithLayout = () => {
+const Posts: NextPageWithLayout = () => {
   const session = useSession();
   const userId = session?.data?.userId;
 
@@ -46,9 +46,9 @@ const IndexPage: NextPageWithLayout = () => {
   );
 };
 
-IndexPage.auth = true;
-IndexPage.roles = [Role.USER, Role.ADMIN];
-export default IndexPage;
+Posts.auth = true;
+Posts.roles = [Role.USER, Role.ADMIN];
+export default Posts;
 
 /**
  * If you want to statically render this page
