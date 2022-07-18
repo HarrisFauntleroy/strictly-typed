@@ -18,7 +18,11 @@
   "rules": {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    // Allow unused vars with underscore
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_"
+    }]
   },
   // "overrides": [
   //   {
