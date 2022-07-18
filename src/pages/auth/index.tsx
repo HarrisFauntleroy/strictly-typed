@@ -10,7 +10,6 @@ import { NextPageContext } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React from 'react';
-import logger from '~/utils/logger';
 
 enum Status {
   AUTHENTICATED = 'authenticated',
@@ -42,8 +41,6 @@ const Auth = ({ children, roles }: AuthProps) => {
   React.useEffect(() => {
     // No session found and no longer loading
     if (!loading && !session) {
-      logger.debug('!loading && !session');
-      logger.debug('This triggers a redirect to sign in');
       router.push('/api/auth/signin');
     }
   }, [loading, router, session]);
@@ -52,8 +49,6 @@ const Auth = ({ children, roles }: AuthProps) => {
   const isWaitingForSession = () => loading || !session;
 
   if (isWaitingForSession()) {
-    logger.debug('loading || !session');
-    logger.debug('This displays a loading indicator');
     return (
       <Center
         position="fixed"
@@ -68,9 +63,6 @@ const Auth = ({ children, roles }: AuthProps) => {
     );
   }
   if (isRoleAllowed()) {
-    logger.debug('roles && !roles?.includes(role)');
-    logger.debug('This triggers a redirect to sign in');
-    logger.debug(roles);
     router.push('/api/auth/signin');
   }
   // Continue
