@@ -20,12 +20,10 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - name: TEST
-      - run: echo $DATABASE_URL
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - run: yarn install
+      - run: echo $DATABASE_URL
 
       - name: Next.js cache
         uses: actions/cache@v2
