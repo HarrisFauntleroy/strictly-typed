@@ -21,7 +21,6 @@ import {
   MenuList,
   Stack,
   useColorMode,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -31,25 +30,11 @@ import {
   MdLightMode,
   MdLogin,
   MdLogout,
-  MdMenu,
-  MdMenuOpen,
   MdNightsStay,
   MdSettings,
 } from 'react-icons/md';
 
-interface Props {
-  sidebarControls: {
-    isOpen: boolean;
-    onOpen: () => void;
-    onClose: () => void;
-    onToggle: () => void;
-    isControlled: boolean;
-    getButtonProps: (props?: unknown) => unknown;
-    getDisclosureProps: (props?: unknown) => unknown;
-  };
-}
-
-const Header = ({ sidebarControls }: Props) => {
+const Header = () => {
   const location = useRouter();
 
   const { data: session } = useSession();
@@ -63,11 +48,7 @@ const Header = ({ sidebarControls }: Props) => {
 
   return (
     <>
-      <Box
-        bg={useColorModeValue('gray.100', 'gray.900')}
-        px={4}
-        id="back-to-top-anchor"
-      >
+      <Box px={6} id="back-to-top-anchor">
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <Breadcrumb
             aria-label="breadcrumb"
@@ -93,12 +74,6 @@ const Header = ({ sidebarControls }: Props) => {
           </Breadcrumb>
           <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={1}>
-              <IconButton
-                variant="link"
-                onClick={sidebarControls.onToggle}
-                aria-label={''}
-                icon={sidebarControls.isOpen ? <MdMenuOpen /> : <MdMenu />}
-              />
               <IconButton
                 variant="link"
                 onClick={toggleColorMode}
@@ -136,11 +111,9 @@ const Header = ({ sidebarControls }: Props) => {
                   </Center>
                   <br />
                   <MenuDivider />
-                  <Stack padding="8px">
-                    <Button>
-                      <Link href="/posts">Posts</Link>
-                    </Button>
-                  </Stack>
+                  <Link href="/posts">
+                    <MenuItem icon={<MdSettings />}>Posts</MenuItem>
+                  </Link>
                   <MenuDivider />
                   {/* <Link href="/changelog">
                     <MenuItem icon={<MdList />}>Changelog</MenuItem>
@@ -148,6 +121,7 @@ const Header = ({ sidebarControls }: Props) => {
                   <Link href="/settings">
                     <MenuItem icon={<MdSettings />}>Settings</MenuItem>
                   </Link>
+                  <MenuDivider />
                   <MenuItem
                     icon={session ? <MdLogout /> : <MdLogin />}
                     onClick={
