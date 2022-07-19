@@ -25,6 +25,9 @@ const colors = {
       a: {
         color: 'teal.500',
       },
+      '.w-md-editor-show-preview': {
+        boxShadow: '0px !important',
+      },
     },
   },
   brand: {

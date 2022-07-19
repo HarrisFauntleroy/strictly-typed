@@ -1,10 +1,14 @@
 type LogType = 'info' | 'warn' | 'error' | 'trace' | 'debug';
 
-const logger = (() => {
-  const isDev = process.env.NODE_ENV === 'development';
-  const isClient: Window | undefined = globalThis.window;
+export const isDev = process.env.NODE_ENV === 'development';
 
-  const customLogText = `%c ${isClient ? 'Client' : 'Server'}:`;
+export const isClient: Window | undefined = globalThis.window;
+
+// If client and in development environment
+export const isDebug = () => isDev && isClient;
+
+const logger = (() => {
+  const customLogText = `%c ${isClient ? 'CLIENT' : 'SERVER'}:`;
   const print = (type: LogType, ...messages: unknown[]) => {
     // If logs enabled in .env or in development mode
     if (process.env.NEXT_PUBLIC_LOGS_ENABLED || isDev) {

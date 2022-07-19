@@ -19,19 +19,19 @@ import {
   Box,
   ButtonGroup,
   Flex,
+  Skeleton,
 } from '@chakra-ui/react';
-import '@uiw/react-markdown-preview/markdown.css';
-import '@uiw/react-md-editor/markdown-editor.css';
-import 'katex/dist/katex.css';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { MdArchive, MdPerson } from 'react-icons/md';
 import { FormattedDate } from 'react-intl';
 import logger from '~/utils/logger';
 import { trpc } from '~/utils/trpc';
 
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+});
 
 const postsByUser = 'post.byUser';
 
@@ -111,6 +111,9 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
           post &&
           post.id && (
             <MDEditor
+              textareaProps={{
+                placeholder: 'Please enter Markdown text',
+              }}
               height={300}
               highlightEnable
               value={value || post.text}
@@ -214,7 +217,6 @@ export const PostCard = ({ post }: PostCardProps) => {
   return (
     <Box
       w={['1fr', '2fr', '3fr', '4fr', '5fr']}
-      minWidth="max-content"
       boxShadow={'2xl'}
       rounded={'md'}
       p="8px"
@@ -224,13 +226,18 @@ export const PostCard = ({ post }: PostCardProps) => {
         <Heading fontSize={'2xl'} fontFamily={'body'}>
           {post.title}
         </Heading>
-        <MDEditor
-          height={300}
-          draggable={false}
-          hideToolbar
-          value={post.text}
-          preview="preview"
-        />
+        <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
+          <MDEditor
+            textareaProps={{
+              placeholder: 'Please enter Markdown text',
+            }}
+            height={300}
+            draggable={false}
+            hideToolbar
+            value={post.text}
+            preview="preview"
+          />
+        </Suspense>
       </Stack>
 
       <Flex
@@ -243,6 +250,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       >
         <Stack direction={'row'} alignItems={'center'} width="100%">
           <Avatar
+            size="sm"
             src={post.user.image || undefined}
             icon={<Icon as={MdPerson} w={8} h={8} />}
           />
