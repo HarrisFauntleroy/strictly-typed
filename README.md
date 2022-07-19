@@ -8,7 +8,7 @@ A simple notes application.
 
 - ⚡ Full-stack React with Next.js
 - ⚡ Postgres Database with Prisma
-- 🐳 Simple deployment with docker compose 🪄
+- 🚀 Simple deployment with Vercel & docker compose 🐳🪄
 - 🧙‍♂️ End to end type-safety with [tRPC](https://trpc.io)
 - 🔐 Runtime .env validation
 - ⚙️ VS Code suggested extensions
@@ -96,6 +96,14 @@ npx prisma format
 
 # Launch prisma studio
 npx prisma studio
+
+# Docker
+# If you would like to deploy the containers to a remote host
+# Set up a context with the remote hosts details
+docker context create home-server --docker "host=ssh://harri@202.172.109.118"
+
+# Start using it
+docker context use home-server
 ```
 
 ## Files of note

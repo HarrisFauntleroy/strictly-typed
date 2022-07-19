@@ -32,6 +32,13 @@ const colors = {
     800: '#153e75',
     700: '#2a69ac',
   },
+  breakpoints: {
+    sm: '30em',
+    md: '48em',
+    lg: '62em',
+    xl: '80em',
+    '2xl': '96em',
+  },
 };
 
 export const primaryTheme = extendTheme({ colors });

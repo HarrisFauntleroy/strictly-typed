@@ -9,7 +9,7 @@
   height: 10px;
   border-radius: 0 0 3px 0;
   -webkit-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .w-md-editor-bar svg {
   display: block;
@@ -32,7 +32,7 @@
   font-size: 14px;
   line-height: 18px;
   -webkit-font-variant-ligatures: common-ligatures;
-          font-variant-ligatures: common-ligatures;
+  font-variant-ligatures: common-ligatures;
 }
 .w-md-editor-text-pre,
 .w-md-editor-text-input,
@@ -46,7 +46,7 @@
   font-size: inherit;
   font-style: inherit;
   -webkit-font-variant-ligatures: inherit;
-          font-variant-ligatures: inherit;
+  font-variant-ligatures: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
   line-height: inherit;
@@ -148,7 +148,8 @@
 .w-md-editor-toolbar-child {
   position: absolute;
   border-radius: 3px;
-  box-shadow: 0 0 0 1px var(--color-border-default), 0 0 0 var(--color-border-default), 0 1px 1px var(--color-border-default);
+  box-shadow: 0 0 0 1px var(--color-border-default),
+    0 0 0 var(--color-border-default), 0 1px 1px var(--color-border-default);
   background-color: var(--color-canvas-default);
   z-index: 1;
   display: none;
@@ -180,7 +181,7 @@
   align-items: center;
   border-radius: 3px 3px 0 0;
   -webkit-user-select: none;
-          user-select: none;
+  user-select: none;
 }
 .w-md-editor-toolbar.bottom {
   border-bottom: 0px;
@@ -248,7 +249,8 @@
   padding-bottom: 1px;
   position: relative;
   color: var(--color-fg-default);
-  box-shadow: 0 0 0 1px var(--color-border-default), 0 0 0 var(--color-border-default), 0 1px 1px var(--color-border-default);
+  box-shadow: 0 0 0 1px var(--color-border-default),
+    0 0 0 var(--color-border-default), 0 1px 1px var(--color-border-default);
   background-color: var(--color-canvas-default);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

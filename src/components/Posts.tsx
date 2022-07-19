@@ -4,19 +4,21 @@ import {
   Modal as ChakraModal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalCloseButton,
   useDisclosure,
   Button,
   Stack,
   Text,
-  Box,
   Heading,
   Link,
   Avatar,
   Icon,
   IconButton,
   IconButtonProps,
+  ModalHeader,
+  Box,
+  ButtonGroup,
+  Flex,
 } from '@chakra-ui/react';
 import '@uiw/react-markdown-preview/markdown.css';
 import '@uiw/react-md-editor/markdown-editor.css';
@@ -33,13 +35,14 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 
 const postsByUser = 'post.byUser';
 
-type Post = {
+export type Post = {
   id: string;
   userId: string;
   title: string;
   text: string;
   user: {
     image: string | null;
+    name: string | null;
   };
   createdAt: Date;
   updatedAt: Date;
@@ -108,6 +111,7 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
           post &&
           post.id && (
             <MDEditor
+              height={300}
               highlightEnable
               value={value || post.text}
               preview="edit"
@@ -194,7 +198,7 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
             {label}
             {icon}
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton mt="8px" />
           {middlebit()}
         </ModalContent>
       </ChakraModal>
@@ -209,7 +213,8 @@ interface PostCardProps {
 export const PostCard = ({ post }: PostCardProps) => {
   return (
     <Box
-      maxW={'445px'}
+      w={['1fr', '2fr', '3fr', '4fr', '5fr']}
+      minWidth="max-content"
       boxShadow={'2xl'}
       rounded={'md'}
       p="8px"
@@ -220,38 +225,47 @@ export const PostCard = ({ post }: PostCardProps) => {
           {post.title}
         </Heading>
         <MDEditor
+          height={300}
           draggable={false}
           hideToolbar
           value={post.text}
           preview="preview"
         />
       </Stack>
-      <Stack
-        mt={6}
-        direction={'row'}
-        spacing={4}
+
+      <Flex
+        mt={2}
+        direction={['column', 'row']}
+        gap={2}
+        width="100%"
         align={'center'}
         justifyContent="space-between"
       >
-        <Stack direction={'row'} align={'center'}>
+        <Stack direction={'row'} alignItems={'center'} width="100%">
           <Avatar
             src={post.user.image || undefined}
             icon={<Icon as={MdPerson} w={8} h={8} />}
           />
           <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-            <Text fontWeight={600}>Harris Fauntleroy</Text>
+            <Text fontWeight={600}>{post.user.name}</Text>
             <Text color={'gray.500'}>
               <FormattedDate value={post.createdAt} />
             </Text>
           </Stack>
         </Stack>
-        <Link href={`/post/${post.id}`}>
-          <IconButton icon={<ExternalLinkIcon />} aria-label={'Go to post'} />
-        </Link>
-        <PostsForm mode="archive" post={post} icon={<MdArchive />} />
-        <PostsForm mode="delete" post={post} icon={<DeleteIcon />} />
-        <PostsForm mode="edit" post={post} icon={<EditIcon />} />
-      </Stack>
+        <ButtonGroup width="100%" gap="4px">
+          <Link href={`/post/${post.id}`}>
+            <IconButton
+              aria-label={'Go to post'}
+              icon={<ExternalLinkIcon />}
+              size="sm"
+            />
+          </Link>
+          <PostsForm mode="archive" post={post} icon={<MdArchive />} />
+          <PostsForm mode="delete" post={post} icon={<DeleteIcon />} />
+          <PostsForm mode="edit" post={post} icon={<EditIcon />} />
+        </ButtonGroup>
+      </Flex>
     </Box>
   );
 };

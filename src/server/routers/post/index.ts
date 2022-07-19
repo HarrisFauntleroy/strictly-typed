@@ -18,6 +18,7 @@ const defaultPostSelect = Prisma.validator<Prisma.PostSelect>()({
   userId: true,
   user: {
     select: {
+      name: true,
       image: true,
     },
   },
@@ -25,7 +26,6 @@ const defaultPostSelect = Prisma.validator<Prisma.PostSelect>()({
   text: true,
   createdAt: true,
   updatedAt: true,
-  // deleted: true,
   archived: true,
 });
 

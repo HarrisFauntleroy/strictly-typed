@@ -55,7 +55,7 @@ const Posts: NextPageWithLayout = () => {
       </Head>
       <Text fontSize="4xl">Posts</Text>
       <PostsForm mode="add" label="New Post" />
-      <SimpleGrid columns={[1, 2, 3, 4, 5, 6]} gap={4}>
+      <SimpleGrid columns={[1, 1, 2, 2, 3, 3]} gap={4}>
         {postsQuery.data?.map((item) => (
           <PostCard key={item.id} post={item} />
         ))}
