@@ -215,6 +215,7 @@ export const PostCard = ({ post }: PostCardProps) => {
   return (
     <FocusLock disabled={!editing} autoFocus={true}>
       <Stack
+        maxWidth="21cm"
         boxShadow="xl"
         rounded="md"
         p="8px"
