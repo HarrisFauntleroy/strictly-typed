@@ -100,14 +100,15 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
                     ...submitValues,
                     userId: userId,
                   })
-                  .then(() =>
+                  .then(() => {
+                    onClose();
                     toast({
                       title: 'Posted!',
                       status: 'success',
                       duration: 3000,
                       isClosable: true,
-                    }),
-                  )
+                    });
+                  })
                   .catch(logger.error);
               }}
             />
