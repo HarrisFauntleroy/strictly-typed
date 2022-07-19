@@ -1,11 +1,11 @@
-datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -14,15 +14,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -30,9 +29,9 @@ model Account {
 model Session {
   id           String   @id @unique @default(cuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   sessionToken String   @unique
   expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
@@ -51,10 +50,67 @@ model User {
   image         String?
   role          Role          @default(USER)
   accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
   Portfolio     Portfolio[]
+  posts         Post[]
+  sessions      Session[]
   Transaction   Transaction[]
+}
+
+model Portfolio {
+  id                         String                   @id @unique @default(cuid())
+  userId                     String
+  icon                       String?
+  currency                   String?
+  ticker                     String?
+  balance                    Float?
+  price                      Float?
+  priceChange24h             Float?
+  priceChangePercentage24h   Float?
+  priceUpdated               DateTime?
+  costBasis                  Float?
+  costBasisCalculated        Boolean                  @default(false)
+  displayName                String?
+  description                String?
+  name                       String?
+  category                   PortfolioType?
+  type                       PortfolioSubType?
+  institutionName            String?
+  incomeType                 IncomeType?
+  annualPercentageRate       Float?
+  active                     Boolean                  @default(true)
+  deleted                    Boolean                  @default(false)
+  connectionApiType          PortfolioConnectionType? @default(MANUAL_ENTRY)
+  connectionApiKey           String?
+  connectionApiSecret        String?
+  connectionApiWalletAddress String?
+  createdAt                  DateTime                 @default(now())
+  updatedAt                  DateTime                 @updatedAt
+  user                       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+  id          String            @id @unique @default(cuid())
+  userId      String
+  timestamp   String?
+  amount      String?
+  currency    String?
+  label       TransactionLabel?
+  description String?
+  txHash      String?
+  deleted     Boolean           @default(false)
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id        String   @id @unique @default(cuid())
+  title     String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  archived  Boolean  @default(false)
+  deleted   Boolean  @default(false)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {
@@ -74,53 +130,6 @@ enum IncomeType {
   RENUMERATION
 }
 
-model Portfolio {
-  id                         String                   @id @unique @default(cuid())
-  userId                     String
-  user                       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  icon                       String?
-  // AUD, if null, use default currency
-  currency                   String?
-  // BTC, VDHG.AX
-  ticker                     String?
-  // Amount held, eg 1 BTC, or a credit card debt of -$1500 (both expressed as a float, 1, -1500 calculated against respective currency and ticker if provided)
-  balance                    Float?
-  price                      Float?
-  priceChange24h             Float?
-  priceChangePercentage24h   Float?
-  priceUpdated               DateTime?
-  costBasis                  Float?
-  // Calculate cost basis from transaction history? NYI
-  costBasisCalculated        Boolean                  @default(false)
-  // User inputted display name
-  displayName                String?
-  // User inputted description
-  description                String?
-  // Name sometimes used to identify an asset.
-  name                       String?
-  // Used to organize accounts
-  category                   PortfolioType?
-  // Used to further sort accounts
-  type                       PortfolioSubType?
-  // Optional insitution name, ie "American Express"
-  institutionName            String?
-  incomeType                 IncomeType?
-  // Earning 5% staking? Put 5
-  annualPercentageRate       Float?
-  // Is this account active?
-  active                     Boolean                  @default(true)
-  deleted                    Boolean                  @default(false)
-  // Whether or not to utilize API
-  connectionApiType          PortfolioConnectionType? @default(MANUAL_ENTRY)
-  // Key and secret for API
-  connectionApiKey           String?
-  connectionApiSecret        String?
-  // Supported cryptocurrency wallet address
-  connectionApiWalletAddress String?
-  createdAt                  DateTime                 @default(now())
-  updatedAt                  DateTime                 @updatedAt
-}
-
 enum PortfolioConnectionType {
   MANUAL_ENTRY
   SWYFTX
@@ -131,7 +140,6 @@ enum PortfolioConnectionType {
   ATOM
 }
 
-// Rename to category
 enum PortfolioType {
   CASH
   CREDIT
@@ -146,8 +154,6 @@ enum PortfolioType {
   OTHER_ASSET
 }
 
-// labels, types, subtypes, etc
-// Can I let them save a  comma seperated array of custom labels? MUI might have a component for multiselect...
 enum PortfolioSubType {
   EXCHANGE
   HOT_WALLET
@@ -176,42 +182,18 @@ enum PortfolioCategory {
 }
 
 enum PortfolioLabel {
-  // CRYPTOCURRENCY
   EXCHANGE
   WALLET
-  // ETF
-  // STOCK
   BROKERAGE
-  // BANK
   ACCOUNT
-  // DEBT
-  BNPL // Buy now pay later
+  BNPL
   VEHICLE
   MORTGAGE
   STUDENT_LOAN
-  // CREDIT
   CREDIT_CARD
-  // OTHER_ASSET
-  // *
-  // OTHER_LIABILITY
-  // *
-  // PROPERTY
   COMMERCIAL
   INDUSTRIAL
   RESIDENTIAL
-}
-
-model Transaction {
-  id          String            @id @unique @default(cuid())
-  userId      String
-  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  timestamp   String?
-  amount      String?
-  currency    String?
-  label       TransactionLabel?
-  description String?
-  txHash      String?
-  deleted     Boolean           @default(false)
 }
 
 enum TransactionLabel {
@@ -233,22 +215,4 @@ enum TransactionLabel {
   LOAN_INTEREST
   INTEREST_PAYMENT
   REALIZED_PROFIT_LOSS
-}
-
-model Post {
-  id     String @id @unique @default(cuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-
-  title String
-  text  String
-
-  // To return `Date`s intact through the API we need to add data transformers
-  // https://trpc.io/docs/data-transformers
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  deleted  Boolean @default(false)
-  archived Boolean @default(false)
 }

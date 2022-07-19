@@ -41,8 +41,17 @@ const Header = () => {
   const user = session?.user;
 
   const pathName = location?.asPath;
-  // Split pathName into seperate peices, remove empty spaces
-  const pathArr = pathName?.split('/').filter((n) => n);
+  /**
+   *
+   * @description Splits path into an array of elements
+   * removing empty spaces and # symbols in the process
+   * @todo The path seems to attach a # in Safari
+   *
+   */
+  const pathArr = pathName
+    ?.replaceAll('#', '')
+    ?.split('/')
+    .filter((n) => n);
 
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -62,7 +71,6 @@ const Header = () => {
             <BreadcrumbItem isCurrentPage={pathName === '/'}>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
-
             {pathArr?.map((path, index) => (
               <BreadcrumbItem
                 key={'breadcrumbs' + index}
