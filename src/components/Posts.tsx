@@ -16,7 +16,6 @@ import {
   IconButton,
   IconButtonProps,
   ModalHeader,
-  Box,
   ButtonGroup,
   Flex,
   Skeleton,
@@ -215,31 +214,27 @@ interface PostCardProps {
 
 export const PostCard = ({ post }: PostCardProps) => {
   return (
-    <Box
+    <Stack
       w={['1fr', '2fr', '3fr', '4fr', '5fr']}
       boxShadow={'2xl'}
       rounded={'md'}
       p="8px"
-      overflow={'hidden'}
     >
-      <Stack>
-        <Heading fontSize={'2xl'} fontFamily={'body'}>
-          {post.title}
-        </Heading>
-        <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
-          <MDEditor
-            textareaProps={{
-              placeholder: 'Please enter Markdown text',
-            }}
-            height={300}
-            draggable={false}
-            hideToolbar
-            value={post.text}
-            preview="preview"
-          />
-        </Suspense>
-      </Stack>
-
+      <Heading fontSize={'2xl'} fontFamily={'body'}>
+        {post.title}
+      </Heading>
+      <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
+        <MDEditor
+          textareaProps={{
+            placeholder: 'Please enter Markdown text',
+          }}
+          height={300}
+          draggable={false}
+          hideToolbar
+          value={post.text}
+          preview="preview"
+        />
+      </Suspense>
       <Flex
         mt={2}
         direction={['column', 'row']}
@@ -274,6 +269,6 @@ export const PostCard = ({ post }: PostCardProps) => {
           <PostsForm mode="edit" post={post} icon={<EditIcon />} />
         </ButtonGroup>
       </Flex>
-    </Box>
+    </Stack>
   );
 };
