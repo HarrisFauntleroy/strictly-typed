@@ -1,5 +1,5 @@
 import { Form } from './Form';
-import { DeleteIcon, EditIcon, ExternalLinkIcon } from '@chakra-ui/icons';
+import { CheckIcon, DeleteIcon, ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Modal as ChakraModal,
   ModalOverlay,
@@ -23,6 +23,7 @@ import {
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import React, { Suspense, useState } from 'react';
+import FocusLock from 'react-focus-lock';
 import { MdArchive, MdPerson } from 'react-icons/md';
 import { FormattedDate } from 'react-intl';
 import logger from '~/utils/logger';
@@ -66,13 +67,6 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
     },
   });
 
-  const editPost = trpc.useMutation('post.edit', {
-    async onSuccess() {
-      // refetches posts after a post is added
-      await utils.invalidateQueries([postsByUser]);
-    },
-  });
-
   const deletePost = trpc.useMutation('post.delete', {
     async onSuccess() {
       // refetches posts after a post is added
@@ -84,8 +78,6 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
 
   const userId = session.data?.userId;
 
-  const [value, setValue] = useState<string>();
-
   const middlebit = () => {
     switch (mode) {
       case 'add':
@@ -94,6 +86,7 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
             <Form
               onSubmit={async (submitValues) => {
                 try {
+                  logger.info(submitValues);
                   addPost.mutateAsync({
                     ...submitValues,
                     userId: userId,
@@ -103,51 +96,6 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
                 }
               }}
             />
-          )
-        );
-      case 'edit':
-        return (
-          post &&
-          post.id && (
-            <MDEditor
-              textareaProps={{
-                placeholder: 'Please enter Markdown text',
-              }}
-              height={300}
-              highlightEnable
-              value={value || post.text}
-              preview="edit"
-              onChange={async (submitValues) => {
-                setValue(submitValues);
-                try {
-                  editPost.mutateAsync({
-                    id: post.id,
-                    userId: post.userId,
-                    data: { text: submitValues },
-                  });
-                } catch (error) {
-                  logger.error(error);
-                }
-              }}
-            />
-
-            // <Form
-            //   formData={{
-            //     title: post?.title,
-            //     text: post?.text,
-            //   }}
-            //   onSubmit={async (submitValues) => {
-            //     try {
-            //       editPost.mutateAsync({
-            //         id: post.id,
-            //         userId: post.userId,
-            //         data: submitValues,
-            //       });
-            //     } catch (error) {
-            //       logger.error(error);
-            //     }
-            //   }}
-            // />
           )
         );
       case 'delete':
@@ -213,62 +161,104 @@ interface PostCardProps {
 }
 
 export const PostCard = ({ post }: PostCardProps) => {
+  const [editing, setEditing] = useState(false);
+
+  const toggleEditing = () => setEditing((editing) => !editing);
+
+  const utils = trpc.useContext();
+
+  const editPost = trpc.useMutation('post.edit', {
+    async onSuccess() {
+      // refetches posts after a post is added
+      await utils.invalidateQueries([postsByUser]);
+    },
+  });
+
   return (
-    <Stack
-      w={['1fr', '2fr', '3fr', '4fr', '5fr']}
-      boxShadow={'2xl'}
-      rounded={'md'}
-      p="8px"
-    >
-      <Heading fontSize={'2xl'} fontFamily={'body'}>
-        {post.title}
-      </Heading>
-      <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
-        <MDEditor
-          textareaProps={{
-            placeholder: 'Please enter Markdown text',
-          }}
-          height={300}
-          draggable={false}
-          hideToolbar
-          value={post.text}
-          preview="preview"
-        />
-      </Suspense>
-      <Flex
-        mt={2}
-        direction={['column', 'row']}
-        gap={2}
-        width="100%"
-        align={'center'}
-        justifyContent="space-between"
+    <FocusLock disabled={!editing} autoFocus={true}>
+      <Stack
+        w={['1fr', '2fr', '3fr', '4fr', '5fr']}
+        h={['1fr', '2fr', '3fr', '4fr', '5fr']}
+        boxShadow={'2xl'}
+        rounded={'md'}
+        p="8px"
+        height="undefined !important"
       >
-        <Stack direction={'row'} alignItems={'center'} width="100%">
-          <Avatar
-            size="sm"
-            src={post.user.image || undefined}
-            icon={<Icon as={MdPerson} w={8} h={8} />}
+        <Heading fontSize={'2xl'} fontFamily={'body'}>
+          {post.title}
+        </Heading>
+        <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
+          <MDEditor
+            onMouseDown={() => {
+              if (!editing) toggleEditing();
+            }}
+            textareaProps={{
+              placeholder: 'Please enter Markdown text',
+            }}
+            height={editing ? 270 : 300}
+            toolbarHeight={32}
+            hideToolbar={!editing}
+            value={post.text}
+            preview={editing ? 'edit' : 'preview'}
+            highlightEnable
+            onChange={async (submitValues) => {
+              try {
+                editPost.mutateAsync({
+                  id: post.id,
+                  userId: post.userId,
+                  data: { text: submitValues },
+                });
+              } catch (error) {
+                logger.error(error);
+              }
+            }}
           />
-          <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-            <Text fontWeight={600}>{post.user.name}</Text>
-            <Text color={'gray.500'}>
-              <FormattedDate value={post.createdAt} />
-            </Text>
-          </Stack>
-        </Stack>
-        <ButtonGroup width="100%" gap="4px">
-          <Link href={`/post/${post.id}`}>
-            <IconButton
-              aria-label={'Go to post'}
-              icon={<ExternalLinkIcon />}
+        </Suspense>
+        <Flex
+          mt={2}
+          direction={['column', 'row']}
+          gap={2}
+          width="100%"
+          align={'center'}
+          justifyContent="space-between"
+        >
+          <Stack direction={'row'} alignItems={'center'} width="100%">
+            <Avatar
               size="sm"
+              src={post.user.image || undefined}
+              icon={<Icon as={MdPerson} w={8} h={8} />}
             />
-          </Link>
-          <PostsForm mode="archive" post={post} icon={<MdArchive />} />
-          <PostsForm mode="delete" post={post} icon={<DeleteIcon />} />
-          <PostsForm mode="edit" post={post} icon={<EditIcon />} />
-        </ButtonGroup>
-      </Flex>
-    </Stack>
+            <Stack direction={'column'} spacing={0} fontSize={'sm'}>
+              <Text fontWeight={600}>{post.user.name}</Text>
+              <Text color={'gray.500'}>
+                <FormattedDate value={post.createdAt} />
+              </Text>
+            </Stack>
+          </Stack>
+          {editing && (
+            <ButtonGroup width="100%" gap="4px">
+              <Link href={`/post/${post.id}`}>
+                <IconButton
+                  aria-label={'Go to post'}
+                  icon={<ExternalLinkIcon />}
+                  size="sm"
+                />
+              </Link>
+              <PostsForm mode="archive" post={post} icon={<MdArchive />} />
+              <PostsForm mode="delete" post={post} icon={<DeleteIcon />} />
+              {/* <PostsForm mode="edit" post={post} icon={<EditIcon />} />
+               */}
+              <IconButton
+                color="green.400"
+                aria-label={'Edit post'}
+                size="sm"
+                icon={<CheckIcon />}
+                onClick={toggleEditing}
+              />
+            </ButtonGroup>
+          )}
+        </Flex>
+      </Stack>
+    </FocusLock>
   );
 };

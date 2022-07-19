@@ -3,24 +3,26 @@ import {
   GlobalStyle,
   extendTheme,
 } from '@chakra-ui/react';
-import { mode } from '@chakra-ui/theme-tools';
 import React, { PropsWithChildren } from 'react';
 
-// 2. Extend the theme to include custom colors, fonts, etc
-const colors = {
+// Extend the theme to include custom color, fonts, etc
+export const primaryTheme = extendTheme({
+  useSystemColorMode: true,
   styles: {
-    global: {
+    global: () => ({
       'html, body': {
         margin: 0,
         padding: 0,
         fontSmoothing: 'antialiased',
-        backgroundColor: mode('#272727 !important', undefined),
-        backgroundImage: mode(
-          'url(/images/background.svg) !important',
-          'url(/images/background-light.jpg) !important',
-        ),
-        backgroundSize: mode('91px 64px !important', '50px 50px !important'),
-        backgroundRepeat: mode(undefined, 'repeat !important'),
+        // backgroundImage: mode(
+        //   'url(/images/background.svg) !important',
+        //   'url(/images/background-light.jpg) !important',
+        // )(props),
+        // backgroundSize: mode(
+        //   '91px 64px !important',
+        //   '50px 50px !important',
+        // )(props),
+        // backgroundRepeat: mode(undefined, 'repeat !important')(props),
       },
       a: {
         color: 'teal.500',
@@ -28,7 +30,7 @@ const colors = {
       '.w-md-editor-show-preview': {
         boxShadow: '0px !important',
       },
-    },
+    }),
   },
   brand: {
     900: '#1a365d',
@@ -42,9 +44,7 @@ const colors = {
     xl: '80em',
     '2xl': '96em',
   },
-};
-
-export const primaryTheme = extendTheme({ colors });
+});
 
 export const ChakraProvider = ({ children }: PropsWithChildren) => {
   return (
