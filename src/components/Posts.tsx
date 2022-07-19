@@ -174,6 +174,8 @@ export const PostCard = ({ post }: PostCardProps) => {
     },
   });
 
+  const [markdown, setMarkdown] = useState<string | undefined>(post.text);
+
   return (
     <FocusLock disabled={!editing} autoFocus={true}>
       <Stack
@@ -198,20 +200,10 @@ export const PostCard = ({ post }: PostCardProps) => {
             height={editing ? 270 : 300}
             toolbarHeight={32}
             hideToolbar={!editing}
-            value={post.text}
+            value={markdown}
             preview={editing ? 'edit' : 'preview'}
             highlightEnable
-            onChange={async (submitValues) => {
-              try {
-                editPost.mutateAsync({
-                  id: post.id,
-                  userId: post.userId,
-                  data: { text: submitValues },
-                });
-              } catch (error) {
-                logger.error(error);
-              }
-            }}
+            onChange={setMarkdown}
           />
         </Suspense>
         <Flex
@@ -253,7 +245,16 @@ export const PostCard = ({ post }: PostCardProps) => {
                 aria-label={'Edit post'}
                 size="sm"
                 icon={<CheckIcon />}
-                onClick={toggleEditing}
+                onClick={() => {
+                  editPost
+                    .mutateAsync({
+                      id: post.id,
+                      userId: post.userId,
+                      data: { text: markdown },
+                    })
+                    .then(() => setEditing(false))
+                    .catch(logger.error);
+                }}
               />
             </ButtonGroup>
           )}

@@ -57,8 +57,6 @@ model User {
   Transaction   Transaction[]
 }
 
-
-
 enum Role {
   USER
   ADMIN
