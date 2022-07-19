@@ -19,6 +19,7 @@ import {
   ButtonGroup,
   Flex,
   Skeleton,
+  useToast,
 } from '@chakra-ui/react';
 import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
@@ -74,9 +75,18 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
     },
   });
 
+  const archivePost = trpc.useMutation('post.archive', {
+    async onSuccess() {
+      // refetches posts after a post is added
+      await utils.invalidateQueries([postsByUser]);
+    },
+  });
+
   const session = useSession();
 
   const userId = session.data?.userId;
+
+  const toast = useToast();
 
   const middlebit = () => {
     switch (mode) {
@@ -85,40 +95,66 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
           userId && (
             <Form
               onSubmit={async (submitValues) => {
-                try {
-                  logger.info(submitValues);
-                  addPost.mutateAsync({
+                addPost
+                  .mutateAsync({
                     ...submitValues,
                     userId: userId,
-                  });
-                } catch (error) {
-                  logger.error(error);
-                }
+                  })
+                  .then(() =>
+                    toast({
+                      title: 'Posted!',
+                      status: 'success',
+                      duration: 3000,
+                      isClosable: true,
+                    }),
+                  )
+                  .catch(logger.error);
               }}
             />
           )
         );
       case 'delete':
         return (
-          <Stack>
-            <Text>Are you sure you want to delete?</Text>
+          post && (
             <Button
-              onClick={() => deletePost.mutateAsync({ id: post?.id || '' })}
+              onClick={() =>
+                deletePost.mutateAsync({ id: post.id }).then(() => {
+                  onClose();
+                  toast({
+                    title: 'Deleted!',
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                  });
+                })
+              }
             >
-              deletePost
+              Delete the post titled: ${post?.title} ?
             </Button>
-          </Stack>
+          )
         );
       case 'archive':
         return (
-          <Stack>
-            <Text>Are you sure you want to archive?</Text>
+          post && (
             <Button
-              onClick={() => deletePost.mutateAsync({ id: post?.id || '' })}
+              onClick={() =>
+                archivePost
+                  .mutateAsync({ id: post.id })
+                  .then(() => {
+                    onClose();
+                    toast({
+                      title: 'Archived!',
+                      status: 'success',
+                      duration: 3000,
+                      isClosable: true,
+                    });
+                  })
+                  .catch(logger.error)
+              }
             >
-              deletePost
+              Archive the post titled: ${post?.title} ?
             </Button>
-          </Stack>
+          )
         );
       default:
         return <Text>Something went wrong...</Text>;
@@ -141,7 +177,7 @@ export const PostsForm = ({ post, mode, icon, label }: PostsFormProps) => {
           size="sm"
         />
       )}
-      <ChakraModal isOpen={isOpen} onClose={onClose}>
+      <ChakraModal isOpen={isOpen} onClose={onClose} isCentered variant="full">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
@@ -179,32 +215,45 @@ export const PostCard = ({ post }: PostCardProps) => {
   return (
     <FocusLock disabled={!editing} autoFocus={true}>
       <Stack
-        w={['1fr', '2fr', '3fr', '4fr', '5fr']}
-        h={['1fr', '2fr', '3fr', '4fr', '5fr']}
-        boxShadow={'2xl'}
-        rounded={'md'}
+        boxShadow="xl"
+        rounded="md"
         p="8px"
-        height="undefined !important"
+        opacity={post.archived ? 0.1 : 1}
       >
         <Heading fontSize={'2xl'} fontFamily={'body'}>
           {post.title}
         </Heading>
         <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
-          <MDEditor
-            onMouseDown={() => {
-              if (!editing) toggleEditing();
-            }}
-            textareaProps={{
-              placeholder: 'Please enter Markdown text',
-            }}
-            height={editing ? 270 : 300}
-            toolbarHeight={32}
-            hideToolbar={!editing}
-            value={markdown}
-            preview={editing ? 'edit' : 'preview'}
-            highlightEnable
-            onChange={setMarkdown}
-          />
+          {editing ? (
+            <MDEditor
+              onMouseDown={() => {
+                if (!editing) toggleEditing();
+              }}
+              textareaProps={{
+                placeholder: 'Please enter Markdown text',
+              }}
+              height={270}
+              // Bit of a hack to get max-content working but it seems to
+              toolbarHeight={'max-content' as unknown as number}
+              value={markdown}
+              preview={'edit'}
+              highlightEnable
+              onChange={setMarkdown}
+            />
+          ) : (
+            <MDEditor
+              onMouseDown={toggleEditing}
+              textareaProps={{
+                placeholder: 'Please enter Markdown text',
+              }}
+              height={300}
+              hideToolbar
+              value={post.text}
+              preview={'preview'}
+              highlightEnable
+              onChange={setMarkdown}
+            />
+          )}
         </Suspense>
         <Flex
           mt={2}
@@ -245,14 +294,16 @@ export const PostCard = ({ post }: PostCardProps) => {
                 aria-label={'Edit post'}
                 size="sm"
                 icon={<CheckIcon />}
-                onClick={() => {
-                  editPost
+                onClick={async () => {
+                  await editPost
                     .mutateAsync({
                       id: post.id,
                       userId: post.userId,
                       data: { text: markdown },
                     })
-                    .then(() => setEditing(false))
+                    .then(() => {
+                      setEditing(false);
+                    })
                     .catch(logger.error);
                 }}
               />

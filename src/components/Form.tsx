@@ -1,6 +1,5 @@
 import {
   Input,
-  useToast,
   Button,
   Textarea,
   ModalFooter,
@@ -30,39 +29,15 @@ interface FormProps {
 }
 
 export const Form = ({ onSubmit, formData }: FormProps) => {
-  const toast = useToast();
-
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: formData,
   });
 
   const handler = (data: FormValues) => {
-    toast({
-      title: 'Submitted!',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
     onSubmit(data);
   };
 
   const { errors } = formState;
-
-  const textarea = document.querySelector('textarea');
-
-  /** Add tab support to markdown input */
-  textarea?.addEventListener('keydown', (e) => {
-    if (e.keyCode === 9) {
-      e.preventDefault();
-
-      textarea.setRangeText(
-        ' ',
-        textarea.selectionStart,
-        textarea.selectionStart,
-        'end',
-      );
-    }
-  });
 
   return (
     <form onSubmit={handleSubmit(handler)}>

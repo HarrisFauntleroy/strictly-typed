@@ -7,7 +7,6 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { createRouter } from '~/server/createRouter';
 import { prisma } from '~/server/prisma';
-import logger, { isDebug } from '~/utils/logger';
 
 /**
  * Default selector for Post.
@@ -31,18 +30,6 @@ const defaultPostSelect = Prisma.validator<Prisma.PostSelect>()({
 });
 
 export const postRouter = createRouter()
-  // Middleware to check request duration
-  .middleware(async ({ path, type, next }) => {
-    if (!isDebug()) next();
-    const start = Date.now();
-    const result = await next();
-    const durationMs = Date.now() - start;
-    result.ok
-      ? logger.info('OK request timing:', { path, type, durationMs })
-      : logger.error('Non-OK request timing', { path, type, durationMs });
-
-    return result;
-  })
   // create
   .mutation('add', {
     input: z.object({
@@ -66,6 +53,11 @@ export const postRouter = createRouter()
        */
 
       return prisma.post.findMany({
+        where: {
+          deleted: {
+            equals: false,
+          },
+        },
         select: defaultPostSelect,
       });
     },
@@ -77,7 +69,9 @@ export const postRouter = createRouter()
     async resolve({ input }) {
       const { id } = input;
       const post = await prisma.post.findUnique({
-        where: { id },
+        where: {
+          id,
+        },
         select: defaultPostSelect,
       });
       if (!post) {
@@ -96,7 +90,12 @@ export const postRouter = createRouter()
     async resolve({ input }) {
       const { userId } = input;
       const post = await prisma.post.findMany({
-        where: { userId },
+        where: {
+          userId,
+          deleted: {
+            equals: false,
+          },
+        },
         select: defaultPostSelect,
       });
       if (!post) {
@@ -134,7 +133,33 @@ export const postRouter = createRouter()
     }),
     async resolve({ input }) {
       const { id } = input;
-      await prisma.post.delete({ where: { id } });
+      await prisma.post.update({ where: { id }, data: { deleted: true } });
+      return {
+        id,
+      };
+    },
+  })
+  // unarchive
+  .mutation('unarchive', {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input }) {
+      const { id } = input;
+      await prisma.post.update({ where: { id }, data: { archived: false } });
+      return {
+        id,
+      };
+    },
+  })
+  // archive
+  .mutation('archive', {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input }) {
+      const { id } = input;
+      await prisma.post.update({ where: { id }, data: { archived: true } });
       return {
         id,
       };
