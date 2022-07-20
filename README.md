@@ -4,19 +4,25 @@
 
 A simple notes application.
 
-## Features
+## Features (Users)
+
+- ✏️ Markdown support
+- ☁️ Cloud storage
+- ▶️ Sync across devices
+- 🎹 Some IDE inspired key combinations
+
+## Features (Developers)
 
 - ⚡ Full-stack React with Next.js
-- ⚡ Postgres Database with Prisma
-- 🚀 Simple deployment with Vercel & docker compose 🐳🪄
+- ⏱ Postgres Database with Prisma + backups
+- 🚀 Fast deploy with docker compose 🐳
 - 🧙‍♂️ End to end type-safety with [tRPC](https://trpc.io)
-- 🔐 Runtime .env validation
-- ⚙️ VS Code suggested extensions
-- 🎨 ESLint + Prettier
-- 💖 CI setup using GitHub Actions:
-  - ✅ End-to-end testing with [Playwright](https://playwright.dev/)
-  - ✅ Linting
-  - ✅ Static Code Analysis with SonarCloud
+- 🔐 Validate environment variables at build time
+- 💡 VS Code Suggested extensions
+- 💖 CI/CD with Github actions
+  - 🧪 End-to-end testing with [Playwright](https://playwright.dev/)
+  - 🎨 [ESLint](https://eslint.org) + Prettier 💅
+  - 🔍 Static Code Analysis with [SonarCloud](https://sonarcloud.io)
 
 ## Setup
 
@@ -46,6 +52,10 @@ nvm use <version>
 ```
 
 ## Development
+
+### Database backups handled by:
+
+https://github.com/prodrigestivill/docker-postgres-backup-local
 
 ### Commands
 

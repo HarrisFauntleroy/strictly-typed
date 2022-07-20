@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # Primary database
   postgres:
     container_name: postgres
     env_file: .env
@@ -9,8 +10,34 @@ services:
       - 5432:5432
     restart: unless-stopped
     volumes:
-      - db_data:/postgres/data
+      - backup:/postgres/data
 
+  # Backups for the database
+  postgres-backup:
+    container_name: postgres-backup
+    image: prodrigestivill/postgres-backup-local
+    restart: always
+    volumes:
+      - backup:/backup/data
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      # alternative for POSTGRES_PASSWORD (to use with docker secrets)
+      # - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+      - POSTGRES_EXTRA_OPTS=-Z9 --schema=public --blobs
+      - SCHEDULE=@every 0h30m00s
+      - BACKUP_KEEP_DAYS=7
+      - BACKUP_KEEP_WEEKS=4
+      - BACKUP_KEEP_MONTHS=6
+      - HEALTHCHECK_PORT=81
+
+  # Redis cache
   redis:
     container_name: redis
     env_file: .env
@@ -20,7 +47,8 @@ services:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning
     volumes:
-      - db_data:/redis/data
+      - db:/redis/data
 
 volumes:
-  db_data:
+  db:
+  backup:
