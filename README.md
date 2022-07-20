@@ -1,4 +1,4 @@
-# Strictly Typed
+# Strongly Typed 💪
 
 ## About
 
@@ -147,26 +147,26 @@ This software is currently a work in progress and is considered in ALPHA state. 
 
 <!-- BADGES -->
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=coverage&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=coverage&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=alert_status&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=alert_status&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=duplicated_lines_density&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=duplicated_lines_density&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=ncloc&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=ncloc&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=sqale_index&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=sqale_index&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=sqale_rating&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=sqale_rating&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=vulnerabilities&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=vulnerabilities&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=code_smells&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=code_smells&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=reliability_rating&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=reliability_rating&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=HarrisFauntleroy_strictly-typed&metric=bugs&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=HarrisFauntleroy_strictly-typed)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=strongly-typed&metric=bugs&token=f272ae0dd44fc7e617996a880e44ea444385bee4)](https://sonarcloud.io/summary/new_code?id=strongly-typed)
 
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/HarrisFauntleroy/strictly-typed?style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/HarrisFauntleroy/strongly-typed?style=flat-square)
 
-![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/HarrisFauntleroy/strictly-typed?style=flat-square)
+![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/HarrisFauntleroy/strongly-typed?style=flat-square)
