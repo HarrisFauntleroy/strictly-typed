@@ -1,9 +1,9 @@
-name: pull-request
+name: unit-test
 on:
   push:
-    branches: [main]
+    branches: [main,development]
   pull_request:
-    branches: [main]
+    branches: [main,development]
 jobs:
   build:
     env:
@@ -17,9 +17,10 @@ jobs:
         with:
           # this will use the latest Node 12 version
           node-version: 14.x
-      - name: Install dependencies
+      # Install deps
+      - name: Install
         run: yarn
-      - name: Run tests ( Currently only unit tests )
+        # Run tests
+      - name: Test
         run: yarn test:unit
-      - name: Lint staged files
-        run: yarn lint
+
