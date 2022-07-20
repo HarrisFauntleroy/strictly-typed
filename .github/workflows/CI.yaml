@@ -6,6 +6,8 @@ on:
     branches: [main]
 jobs:
   build:
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
