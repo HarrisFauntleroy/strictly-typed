@@ -27,6 +27,11 @@ import React, { Suspense, useState } from 'react';
 import FocusLock from 'react-focus-lock';
 import { MdArchive, MdPerson } from 'react-icons/md';
 import { FormattedDate } from 'react-intl';
+import rehypeKatex from 'rehype-katex';
+import rehypeStringify from 'rehype-stringify';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import remarkParse from 'remark-parse';
 import logger from '~/utils/logger';
 import { trpc } from '~/utils/trpc';
 
@@ -231,10 +236,13 @@ export const PostCard = ({ post }: PostCardProps) => {
               onMouseDown={() => {
                 if (!editing) toggleEditing();
               }}
+              previewOptions={{
+                plugins: [],
+              }}
               textareaProps={{
                 placeholder: 'Please enter Markdown text',
               }}
-              height={270}
+              height={300}
               // Bit of a hack to get max-content working but it seems to
               toolbarHeight={'max-content' as unknown as number}
               value={markdown}
@@ -247,6 +255,11 @@ export const PostCard = ({ post }: PostCardProps) => {
               onMouseDown={toggleEditing}
               textareaProps={{
                 placeholder: 'Please enter Markdown text',
+              }}
+              previewOptions={{
+                rehypePlugins: [rehypeKatex, rehypeStringify],
+                remarkPlugins: [remarkGfm, remarkMath, remarkParse],
+                plugins: [],
               }}
               height={300}
               hideToolbar

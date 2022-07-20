@@ -14,7 +14,7 @@ const Index: NextPageWithLayout = () => {
   return (
     <Stack gap={2}>
       <Head>
-        <title>Home</title>
+        <title>Settings</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Text fontSize="4xl">Home</Text>
