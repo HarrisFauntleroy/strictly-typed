@@ -19,7 +19,7 @@ A simple notes application.
 - 🧙‍♂️ End to end type-safety with [tRPC](https://trpc.io)
 - 🔐 Validate environment variables at build time
 - 💡 VS Code Suggested extensions
-- 💖 CI/CD with Github actions
+- 💖 CI/CD with GitHub actions
   - 🧪 End-to-end testing with [Playwright](https://playwright.dev/)
   - 🎨 [ESLint](https://eslint.org) + Prettier 💅
   - 🔍 Static Code Analysis with [SonarCloud](https://sonarcloud.io)
