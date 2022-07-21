@@ -1,5 +1,9 @@
 # Strongly Typed 💪
 
+<!-- BADGES -->
+
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/HarrisFauntleroy/strongly-typed?style=flat-square)
+
 ## About
 
 A simple notes application.
@@ -154,7 +158,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## **Disclaimer** 🚨
 
 This software is currently a work in progress and is considered in ALPHA state. Features will appear and disappear, APIs will be changed, bugs will be introduced, your feedback is always welcome! 🚧
-
-<!-- BADGES -->
-
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/HarrisFauntleroy/strongly-typed?style=flat-square)
