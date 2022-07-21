@@ -140,7 +140,7 @@ docker context use home-server
     </tr>
     <tr>
       <td><a href="./src/server/routers"><code>./src/server/routers</code></a></td>
-      <td>Your app's different tRPC-routers</td>
+       <td>All tRPC-routers</td>
     </tr>
   </tbody>
 </table>
