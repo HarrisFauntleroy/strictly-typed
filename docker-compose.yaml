@@ -41,7 +41,7 @@ services:
   redis:
     container_name: redis
     env_file: .env
-    image: redis:6.2-alpine
+    image: redis:7.0-alpine
     restart: unless-stopped
     ports:
       - '6379:6379'
