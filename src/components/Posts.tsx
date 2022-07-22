@@ -219,18 +219,19 @@ export const PostCard = ({ post }: PostCardProps) => {
   const [markdown, setMarkdown] = useState<string | undefined>(post.text);
 
   return (
-    <FocusLock disabled={!editing} autoFocus={true}>
-      <Stack
-        maxWidth="21cm"
-        boxShadow="xl"
-        rounded="md"
-        p="8px"
-        opacity={post.archived ? 0.1 : 1}
-      >
-        <Heading fontSize={'2xl'} fontFamily={'body'}>
-          {post.title}
-        </Heading>
-        <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
+    <Suspense fallback={<Skeleton height={300} isLoaded={!!post} />}>
+      <FocusLock disabled={!editing} autoFocus={true}>
+        <Stack
+          maxWidth="21cm"
+          boxShadow="xl"
+          rounded="md"
+          p="8px"
+          opacity={post.archived ? 0.1 : 1}
+        >
+          <Heading fontSize={'2xl'} fontFamily={'body'}>
+            {post.title}
+          </Heading>
+
           {editing ? (
             <MDEditor
               onMouseDown={() => {
@@ -269,63 +270,63 @@ export const PostCard = ({ post }: PostCardProps) => {
               onChange={setMarkdown}
             />
           )}
-        </Suspense>
-        <Flex
-          mt={2}
-          direction={['column', 'row']}
-          gap={2}
-          width="100%"
-          align={'center'}
-          justifyContent="space-between"
-        >
-          <Stack direction={'row'} alignItems={'center'} width="100%">
-            <Avatar
-              size="sm"
-              src={post.user.image || undefined}
-              icon={<Icon as={MdPerson} w={8} h={8} />}
-            />
-            <Stack direction={'column'} spacing={0} fontSize={'sm'}>
-              <Text fontWeight={600}>{post.user.name}</Text>
-              <Text color={'gray.500'}>
-                <FormattedDate value={post.createdAt} />
-              </Text>
-            </Stack>
-          </Stack>
-          {editing && (
-            <ButtonGroup width="100%" gap="4px">
-              <Link href={`/post/${post.id}`}>
-                <IconButton
-                  aria-label={'Go to post'}
-                  icon={<ExternalLinkIcon />}
-                  size="sm"
-                />
-              </Link>
-              <PostsForm mode="archive" post={post} icon={<MdArchive />} />
-              <PostsForm mode="delete" post={post} icon={<DeleteIcon />} />
-              {/* <PostsForm mode="edit" post={post} icon={<EditIcon />} />
-               */}
-              <IconButton
-                color="green.400"
-                aria-label={'Edit post'}
+          <Flex
+            mt={2}
+            direction={['column', 'row']}
+            gap={2}
+            width="100%"
+            align={'center'}
+            justifyContent="space-between"
+          >
+            <Stack direction={'row'} alignItems={'center'} width="100%">
+              <Avatar
                 size="sm"
-                icon={<CheckIcon />}
-                onClick={async () => {
-                  await editPost
-                    .mutateAsync({
-                      id: post.id,
-                      userId: post.userId,
-                      data: { text: markdown },
-                    })
-                    .then(() => {
-                      setEditing(false);
-                    })
-                    .catch(logger.error);
-                }}
+                src={post.user.image || undefined}
+                icon={<Icon as={MdPerson} w={8} h={8} />}
               />
-            </ButtonGroup>
-          )}
-        </Flex>
-      </Stack>
-    </FocusLock>
+              <Stack direction={'column'} spacing={0} fontSize={'sm'}>
+                <Text fontWeight={600}>{post.user.name}</Text>
+                <Text color={'gray.500'}>
+                  <FormattedDate value={post.createdAt} />
+                </Text>
+              </Stack>
+            </Stack>
+            {editing && (
+              <ButtonGroup width="100%" gap="4px">
+                <Link href={`/post/${post.id}`}>
+                  <IconButton
+                    aria-label={'Go to post'}
+                    icon={<ExternalLinkIcon />}
+                    size="sm"
+                  />
+                </Link>
+                <PostsForm mode="archive" post={post} icon={<MdArchive />} />
+                <PostsForm mode="delete" post={post} icon={<DeleteIcon />} />
+                {/* <PostsForm mode="edit" post={post} icon={<EditIcon />} />
+                 */}
+                <IconButton
+                  color="green.400"
+                  aria-label={'Edit post'}
+                  size="sm"
+                  icon={<CheckIcon />}
+                  onClick={async () => {
+                    await editPost
+                      .mutateAsync({
+                        id: post.id,
+                        userId: post.userId,
+                        data: { text: markdown },
+                      })
+                      .then(() => {
+                        setEditing(false);
+                      })
+                      .catch(logger.error);
+                  }}
+                />
+              </ButtonGroup>
+            )}
+          </Flex>
+        </Stack>
+      </FocusLock>
+    </Suspense>
   );
 };

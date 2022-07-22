@@ -38,7 +38,7 @@ export const postRouter = createRouter()
       text: z.string().min(1),
     }),
     async resolve({ input }) {
-      return await prisma.post.create({
+      return prisma.post.create({
         data: input,
         select: defaultPostSelect,
       });
@@ -119,7 +119,7 @@ export const postRouter = createRouter()
     }),
     async resolve({ input }) {
       const { id, data } = input;
-      return await prisma.post.update({
+      return prisma.post.update({
         where: { id },
         data,
         select: defaultPostSelect,

@@ -60,7 +60,7 @@ export const createContext = async ({
   }
 
   if (useMockProvider) {
-    return await createContextInner({});
+    return createContextInner({});
   } else
     return {
       req,

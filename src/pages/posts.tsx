@@ -4,13 +4,7 @@
  *
  */
 import { NextPageWithLayout } from './_app';
-import {
-  Center,
-  CircularProgress,
-  SimpleGrid,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
+import { SimpleGrid, Stack, Text } from '@chakra-ui/react';
 import { Role } from '@prisma/client';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -33,19 +27,7 @@ const Posts: NextPageWithLayout = () => {
   //   }
   // }, [postsQuery.data, utils]);
 
-  if (postsQuery.status === 'loading')
-    return (
-      <Center
-        position="fixed"
-        minWidth="100vw"
-        minHeight="100vh"
-        background="transparent"
-        top={0}
-        left={0}
-      >
-        <CircularProgress isIndeterminate size="64px" thickness="8px" />
-      </Center>
-    );
+  if (postsQuery.isLoading) return <Text>Loading...</Text>;
 
   return (
     <Stack gap={2}>
