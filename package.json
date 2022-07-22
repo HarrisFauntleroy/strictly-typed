@@ -40,7 +40,7 @@
     "@emotion/styled": "^11.9.3",
     "@next-auth/prisma-adapter": "^1.0.3",
     "@prisma/client": "4.0.0",
-    "@trpc/client": "^9.26.0",
+    "@trpc/client": "9.26.2",
     "@trpc/next": "^9.26.0",
     "@trpc/react": "^9.26.0",
     "@trpc/server": "^9.26.0",
