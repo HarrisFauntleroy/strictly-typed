@@ -43,7 +43,7 @@
     "@trpc/client": "^9.26.0",
     "@trpc/next": "^9.26.0",
     "@trpc/react": "^9.26.0",
-    "@trpc/server": "^9.26.0",
+    "@trpc/server": "9.26.2",
     "@uiw/react-md-editor": "3.6.0",
     "clsx": "^1.1.1",
     "framer-motion": "^6.5.1",
