@@ -4,6 +4,10 @@
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/HarrisFauntleroy/strongly-typed?style=flat-square)
 
+[![unit-test](https://github.com/HarrisFauntleroy/strongly-typed/actions/workflows/unit.yaml/badge.svg)](https://github.com/HarrisFauntleroy/strongly-typed/actions/workflows/unit.yaml)
+
+[![e2e-test](https://github.com/HarrisFauntleroy/strongly-typed/actions/workflows/e2e.yml/badge.svg)](https://github.com/HarrisFauntleroy/strongly-typed/actions/workflows/e2e.yml)
+
 ## About
 
 A simple notes application.
@@ -57,7 +61,7 @@ nvm use <version>
 
 ## Development
 
-### Database backups handled by:
+### Database backups handled by
 
 https://github.com/prodrigestivill/docker-postgres-backup-local
 
