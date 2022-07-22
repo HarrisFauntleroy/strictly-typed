@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "toot": "echo '${DOCKER_HOST}'",
     "build:1-migrate": "prisma migrate deploy",
     "build:2-build": "next build",
     "build": "run-s build:*",
