@@ -40,11 +40,6 @@ export default NextAuth({
   pages: {
     signIn: '/auth/signin',
   },
-  theme: {
-    colorScheme: 'auto',
-    brandColor: '',
-    logo: 'https://next-auth.js.org/img/logo/logo-xs.png',
-  },
   callbacks: {
     async session({ session, user }) {
       const userData = await prisma.user.findUnique({
