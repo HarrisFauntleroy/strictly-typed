@@ -45,7 +45,6 @@ const Header = () => {
    *
    * @description Splits path into an array of elements
    * removing empty spaces and # symbols in the process
-   * @todo The path seems to attach a # in Safari
    *
    */
   const pathArr = pathName

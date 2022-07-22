@@ -1,9 +1,3 @@
-/**
- *
- * TODO
- * Write tests here
- *
- */
 import { test } from '@playwright/test';
 
 test.setTimeout(35e3);

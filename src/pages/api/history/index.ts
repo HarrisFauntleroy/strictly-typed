@@ -1,8 +1,6 @@
 /**
  *
  *	History API route
- *	Captures all users posts for a period and saves them
- *	For future aggregation
  *
  */
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -14,8 +12,6 @@ export type GenericInput =
   | { [x: string]: unknown };
 
 // Get all users posts from the database
-// TODO write test for endpoint
-// Test for good input, bad input, undefined and null inputs, etc.
 export const getPostHistory = async (userId?: string) =>
   await prisma.post.findMany({
     where: {
